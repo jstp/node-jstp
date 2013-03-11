@@ -1,0 +1,1 @@
+exports.test = require(__dirname + '/test.js');

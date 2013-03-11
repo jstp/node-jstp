@@ -1,0 +1,9 @@
+{
+  "name": "node-jstp",
+  "version": "0.0.1",
+  "dependencies": {
+    "websocket-client": "*",
+    "faye-websocket": "*",
+    "cli-color": "*"
+  }
+}
