@@ -19,7 +19,8 @@
   "keywords": [
     "jstp",
     "websocket",
-    "json"
+    "json",
+    "distributed"
   ],
   "repository": "git://github.com/Fetcher/node-jstp",
   "main": "index",
