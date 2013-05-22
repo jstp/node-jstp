@@ -1,9 +1,29 @@
 {
   "name": "node-jstp",
-  "version": "0.0.1",
+  "description": "Node JSTP implementation",
+  "version": "0.0.1-alpha",
+  "contributors": [
+    {
+      "name": "Fernando Vía Canel",
+      "email": "fernando.via@gmail.com"
+    },
+    {
+      "name": "Luciano Bertenasco",
+      "email": "lbertenasco@gmail.com"
+    }
+  ],
   "dependencies": {
-    "websocket-client": "*",
-    "faye-websocket": "*",
-    "cli-color": "*"
+    "faye-websocket": "0.5.0",
+    "cli-color": "latest"
+  },
+  "keywords": [
+    "jstp",
+    "websocket",
+    "json"
+  ],
+  "repository": "git://github.com/Fetcher/node-jstp",
+  "main": "index",
+  "engines": {
+    "node": "*"
   }
 }
