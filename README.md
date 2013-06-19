@@ -1,4 +1,3 @@
-Node JSTP
-=========
+This package is no longer maintained, use `jstp` instead.
 
-Experimenting with JSTP in Node.js
+`npm install jstp`
