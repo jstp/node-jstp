@@ -1,7 +1,7 @@
 {
-  "name": "node-jstp",
+  "name": "jstp",
   "description": "Node JSTP implementation",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "contributors": [
     {
       "name": "Fernando Vía Canel",
@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "faye-websocket": "0.5.0",
-    "cli-color": "latest"
+    "cli-color": "0.2.2"
   },
   "keywords": [
     "jstp",
@@ -22,7 +22,7 @@
     "json",
     "distributed"
   ],
-  "repository": "git://github.com/Fetcher/node-jstp",
+  "repository": "git://github.com/southlogics/node-jstp",
   "main": "index",
   "engines": {
     "node": "*"
