@@ -10,13 +10,15 @@ var methods = {
   }, 
 }
 
-jstp.bind({
+jstp
+.bind({
   host: [['localhost', 44444, 'tcp']],
   endpoint: {
     method: "POST",
     resource: ["Something", "*"]
   }
 }, methods.fast, methods)
+
 .bind({
   host: [['localhost', 44444, 'tcp']],
   endpoint: {
