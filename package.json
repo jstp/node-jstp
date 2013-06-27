@@ -17,6 +17,9 @@
     "cli-color": "0.2.2",
     "async": "0.2.9"
   },
+  "devDependencies": {
+    "monje": "0.0.5"
+  },
   "keywords": [
     "jstp",
     "websocket",

@@ -2,14 +2,21 @@ var jstp = require('../../index.js');
 
 var methods = {
   slow: function (dispatch) {
-    for (i = 0; i < 1000000000; i ++) {
-      "2" + "2";
-    }
-    console.log("Sloooww");   
+    setTimeout( function () {
+      for (i = 0; i < 1000000000; i ++) {
+        "2" + "2";
+      }
+      console.log("Sloooww");         
+    }, 2);
   }, 
 
   fast: function (dispatch) {
-    console.log("Here I am, the 'fast'");   
+    setTimeout( function () {
+      for (i = 0; i < 1000000000; i ++) {
+        "2" + "2";
+      }
+      console.log("Fast");         
+    }, 1);
   }
 }
 
