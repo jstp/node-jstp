@@ -13,9 +13,8 @@
     }
   ],
   "dependencies": {
-    "faye-websocket": "0.5.0",
-    "cli-color": "0.2.2",
-    "async": "0.2.9"
+    "faye-websocket":"0.5.0",
+    "cli-color":"0.2.2"
   },
   "devDependencies": {
     "monje": "0.0.5"
