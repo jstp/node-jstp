@@ -14,7 +14,8 @@
   ],
   "dependencies": {
     "faye-websocket":"0.5.0",
-    "cli-color":"0.2.2"
+    "cli-color":"0.2.2",
+    "uuid": "1.4.1"
   },
   "devDependencies": {
     "monje": "0.0.5"
