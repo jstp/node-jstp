@@ -1,7 +1,7 @@
 var JSTP = require('../../lib/jstp');
 
 var obj = {
-  print: function (engine, dispatch) {
+  print: function (engine, answer, dispatch) {
     console.log("Epic to have a response!");
   }
 }
