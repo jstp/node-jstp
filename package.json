@@ -1,7 +1,7 @@
 {
   "name": "jstp",
   "description": "Node JSTP implementation",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "contributors": [
     {
       "name": "Fernando Vía Canel",
