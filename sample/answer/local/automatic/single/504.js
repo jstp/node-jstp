@@ -7,7 +7,7 @@ var Resource = {
 
   answer: function (engine, answer) {
     console.log("Here is the timeout");
-    console.log(answer);
+    // console.log(answer);
   }
 }
 

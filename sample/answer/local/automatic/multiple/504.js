@@ -3,14 +3,17 @@ var jstp = require("../../../../../index.js");
 var Resource = {
   process: function (engine, answer, dispatch) {
     if (answer) console.log("First Resource Answer");
+    // else        console.log("Got here");
   },
+
   answer: function (engine, answer) {
-    console.log(answer);
+    console.log("Got the answer");
   }
 }
 var SecondResource = {
   process: function (engine, answer, dispatch) {
     if (answer) console.log("Second Resource Answer");
+    // else        console.log("Got here");
   }
 }
 
