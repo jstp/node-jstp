@@ -18,7 +18,8 @@
     "uuid": "1.4.1"
   },
   "devDependencies": {
-    "monje": "0.0.5"
+    "monje": "0.0.5",
+    "express": "latest"
   },
   "keywords": [
     "jstp",
