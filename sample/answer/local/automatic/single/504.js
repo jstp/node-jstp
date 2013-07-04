@@ -2,9 +2,11 @@ var jstp = require("../../../../../index.js");
 
 var Resource = {
   process: function (engine, answer, dispatch) {
-    console.log("Will timeout, not answer");
+    console.log("Will timeout, won't answer");
   },
+
   answer: function (engine, answer) {
+    console.log("Here is the timeout");
     console.log(answer);
   }
 }
