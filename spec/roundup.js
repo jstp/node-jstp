@@ -120,6 +120,22 @@ vows.describe('article').addBatch({
     'should have the right body': function (message) {
       assert.equal(message.body, 'This goes back!');
     }
+  },
+
+  'patterns everywhere': {
+    topic: function () {
+      jstp.use('patterned', {
+        '...//:here/.../*//:manyoptions,...': {
+          '*': this.callback
+        }
+      });
+
+      jstp.put('local,remote,everywhere//options/and/more/options//ok,bar', 'Mad message');
+    },
+
+    'it should match': function (message) {
+      assert.equal(message.body, "Mad message");
+    }
   }
 
 }).export(module); 
