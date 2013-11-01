@@ -4,6 +4,6 @@ var vows    = require('vows')
 
 vows.describe('JSTPCallbackInterface').addBatch({
   '#call( JSTPEngine engine, JSTPTriggeringPackage triggeringPackage )': {
-    'should accept the arguments': 'pending'
+    'should accept the arguments': function () { }
   }
 }).export(module); 
