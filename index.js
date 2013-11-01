@@ -1,1 +1,1 @@
-module.exports = require('./lib/jstp.js');
+module.exports = require('./lib/jstp/index');
