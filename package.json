@@ -19,7 +19,8 @@
   },
   "devDependencies": {
     "monje": "0.0.5",
-    "express": "latest"
+    "express": "latest",
+    "vows": "latest"
   },
   "keywords": [
     "jstp",
