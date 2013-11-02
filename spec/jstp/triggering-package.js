@@ -3,8 +3,23 @@ var vows    = require('vows')
   , jstp    = require('../../index.js');
 
 vows.describe('JSTPTriggeringPackage').addBatch({
-  'new JSTPTriggeringPackage( JSTPEngine engine )': {
-    'should initialize the engine': 'pending'
+  'new JSTPTriggeringPackage( JSTPEngine engine, String currentEmitter )': {
+    'a non empty emitter is given': {
+      'should have the engine and the emitter': 'pending'/*function () {
+        var mockEngine = {};
+        var triggeringPackage = new jstp.JSTPTriggeringPackage( mockEngine, "emitMe" );
+        assert.equal(triggeringPackage.getEngine(), mockEngine);
+        assert.equal(triggeringPackage.getCurrentEmitter(), "emitMe");
+      }*/
+    },
+
+    'an empty or null emitter is given': {
+      'should throw an JSTPMissingEmitterInTriggeringPackage exception': 'pending'
+    }
+  },
+
+  '#getEngine()': {
+    'should return the engine': 'pending'
   },
 
   '#setAsDispatchWith( JSTPDispatch dispatch )': {
@@ -43,6 +58,25 @@ vows.describe('JSTPTriggeringPackage').addBatch({
     'there is no dispatch': {
       'should return null': 'pending'
     }
+  },
+
+  '#getCurrentEmitter()': {
+    'should return the emitter label': 'pending'
+  },
+
+  '#answer( Integer statusCode, Object body [, JSTPCallback callback [, Object context ]])': {
+    'there is a dispatch with transaction and triggering IDs': {
+      'should prepare the JSTPDispatch answer and call the engine with the data': 'pending',
+      'should set the From Header accordingly with the current Emitter': 'pending'
+    },
+    'there is an answer with transaction and triggering IDs': {
+      'should prepare the JSTPDispatch answer and call the engine with the data': 'pending',
+      'should set the From Header accordingly with the current Emitter': 'pending'
+    }
+  },
+
+  '#dispatch( JSTPDispatch dispatch [, JSTPCallback callback [, Object context ]])': {
+    'should set the From Header accordingly with the current Emitter': 'pending'    
   }
 }).export(module); 
 
