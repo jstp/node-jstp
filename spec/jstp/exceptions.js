@@ -25,3 +25,21 @@ vows.describe('JSTPMissingResourcePatternInEndpoint').addBatch({
     assert.isFunction(jstp.JSTPMissingResourcePatternInEndpoint);
   }
 }).export(module); 
+
+vows.describe('JSTPMissingEmitterInTriggeringPackage').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPMissingEmitterInTriggeringPackage);
+  }
+}).export(module); 
+
+vows.describe('JSTPInvalidProtocolHeaderDefinition').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidProtocolHeaderDefinition);
+  }
+}).export(module); 
+
+vows.describe('JSTPInvalidResourceHeaderDefinition').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidResourceHeaderDefinition);
+  }
+}).export(module); 

@@ -5,38 +5,76 @@ var vows    = require('vows')
 vows.describe('JSTPTriggeringPackage').addBatch({
   'new JSTPTriggeringPackage( JSTPEngine engine, String currentEmitter )': {
     'a non empty emitter is given': {
-      'should have the engine and the emitter': 'pending'/*function () {
+      'should have the engine and the emitter': function () {
         var mockEngine = {};
         var triggeringPackage = new jstp.JSTPTriggeringPackage( mockEngine, "emitMe" );
         assert.equal(triggeringPackage.getEngine(), mockEngine);
         assert.equal(triggeringPackage.getCurrentEmitter(), "emitMe");
-      }*/
+      }
     },
 
-    'an empty or null emitter is given': {
-      'should throw an JSTPMissingEmitterInTriggeringPackage exception': 'pending'
+    'a null emitter is given': {
+      'should throw an JSTPMissingEmitterInTriggeringPackage exception': function () {
+        assert.throws(function () {
+          new jstp.JSTPTriggeringPackage({}, null);
+        }, jstp.JSTPMissingEmitterInTriggeringPackage);
+      }
+    },
+
+    'only one argument is given': {
+      'should throw an JSTPMissingEmitterInTriggeringPackage exception': function () {
+        assert.throws(function () {
+          new jstp.JSTPTriggeringPackage({});
+        }, jstp.JSTPMissingEmitterInTriggeringPackage);
+      }
+    },
+
+    'an empty string is given': {
+      'should throw an JSTPMissingEmitterInTriggeringPackage exception': function () {
+        assert.throws(function () {
+          new jstp.JSTPTriggeringPackage({}, "");
+        }, jstp.JSTPMissingEmitterInTriggeringPackage);
+      }
+    },
+
+    'a non string argument is given': {
+      'should throw an JSTPMissingEmitterInTriggeringPackage exception': function () {
+        assert.throws(function () {
+          new jstp.JSTPTriggeringPackage({}, ["asdf"]);
+        }, jstp.JSTPMissingEmitterInTriggeringPackage);
+      }
     }
   },
 
   '#getEngine()': {
-    'should return the engine': 'pending'
-  },
-
-  '#setAsDispatchWith( JSTPDispatch dispatch )': {
-    'is a valid non answer JSTPDispatch': {
-      'should set the dispatch': 'pending',
-      'there was an answer set': {
-        'should remove the answer': 'pending'
-      }
+    'should return the engine': function () {
+      var mockEngine = {};
+      var triggeringPackage = new jstp.JSTPTriggeringPackage( mockEngine, "something" );
+      assert.equal(triggeringPackage.getEngine(), mockEngine);
     }
   },
 
-  '#setAsAnswerWith( JSTPDispatch answer )': {
+  '#setDispatch( JSTPDispatch dispatch )': {
+    'is a valid non answer JSTPDispatch': {
+      'should set the dispatch': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+        var dispatch = new jstp.JSTPDispatch();
+        
+        dispatch.setMethod("GET");
+        dispatch.setResource(["test"]);
+        dispatch.setProtocol(["JSTP", "0.6"]);
+        dispatch.setTimestamp(new Date().getTime());
+
+        triggeringPackage.setDispatch(dispatch);
+        assert.equal(triggeringPackage.getDispatch(), dispatch);
+      },
+      
+      'should not set the answer': 'pending'
+    },
+
     'is a valid answer JSTPDispatch': {
       'should set the answer': 'pending',
-      'there was a dispatch set': {
-        'should remove the dispatch': 'pending'
-      }
+      'should not set the dispatch': 'pending'
     }
   },
 
@@ -61,7 +99,11 @@ vows.describe('JSTPTriggeringPackage').addBatch({
   },
 
   '#getCurrentEmitter()': {
-    'should return the emitter label': 'pending'
+    'should return the emitter label': function () {
+      var mockEngine = {};
+      var triggeringPackage = new jstp.JSTPTriggeringPackage(mockEngine, "myEmitter");
+      assert.equal(triggeringPackage.getCurrentEmitter(), "myEmitter");
+    }
   },
 
   '#answer( Integer statusCode, Object body [, JSTPCallback callback [, Object context ]])': {

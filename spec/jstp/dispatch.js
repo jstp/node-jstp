@@ -4,56 +4,150 @@ var vows    = require('vows')
 
 vows.describe('JSTPDispatch').addBatch({
   '#getProtocol()': {
-    'should return the Array protocol': 'pending'
+    'should return the Array protocol': function () {
+      var dispatch = new jstp.JSTPDispatch();
+      var protocol = ["JSTP", "0.6"]
+      dispatch.setProtocol(protocol);
+      assert.equal(dispatch.getProtocol(), protocol);
+    }
   },
 
   '#setProtocol( Array<String> protocol )': {
     'is a valid array of strings': {
-      'should set the protocol': 'pending'
+      'should set the protocol': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        var protocol = ["JSTP", "0.6"];
+        dispatch.setProtocol(protocol);
+        assert.equal(dispatch.getProtocol(), protocol);
+      }
     },
 
     'is null': {
-      'should clean the protocol': 'pending'
+      'should clean the protocol': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        var protocol = ["JSTP", "0.6"];
+        dispatch.setProtocol(protocol);
+        dispatch.setProtocol(null);
+        assert.isNull(dispatch.getProtocol());
+      }
     },
 
-    'is not a valid array of strings': {
-      'should throw an exception': 'pending'
-    }
+    'is an empty array': {
+      'should throw a JSTPInvalidProtocolHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setProtocol([]);
+        }, jstp.JSTPInvalidProtocolHeaderDefinition);
+      }
+    },
+
+    'is not an array': {
+      'should throw a JSTPInvalidProtocolHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setProtocol("this stuff");
+        }, jstp.JSTPInvalidProtocolHeaderDefinition);
+      }
+    },
+
+    'contains non-string elements': {
+      'should throw a JSTPInvalidProtocolHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setProtocol(["asdfda", 21]);
+        }, jstp.JSTPInvalidProtocolHeaderDefinition);
+      }
+    },
   },
 
   '#getMethod()': {
-    'should return the String method': 'pending'
+    'should return the String method': function () {
+      var dispatch = new jstp.JSTPDispatch();
+      dispatch.setMethod("PUT");
+      assert.equal(dispatch.getMethod(), "PUT");
+    }
   },
 
   '#setMethod( String method )': {
     'is a valid string': {
-      'should set the method': 'pending'
+      'should set the method': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod("POST");
+        assert.equal(dispatch.getMethod(), "POST");
+      }
     },
 
     'is null': {
-      'should clean the method': 'pending'
+      'should clean the method': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod(null);
+        assert.isNull(dispatch.getMethod());
+      }
     },
 
     'is not a valid string nor null': {
-      'should throw an exception': 'pending'
+      'should throw a JSTPInvalidMethodHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setMethod(345);
+        }, jstp.JSTPInvalidMethodHeaderDefinition);
+      }
+    },
+
+    'is an empty string': {
+      'should throw a JSTPInvalidMethodHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setMethod("");
+        }, jstp.JSTPInvalidMethodHeaderDefinition);
+      }
     }
   },  
 
   '#getResource()': {
-    'should return the Array resource': 'pending'
+    'should return the Array resource': function () {
+      var dispatch = new jstp.JSTPDispatch();
+      var resource = ["sfdas"];
+      dispatch.setResource(resource);
+      assert.equal(dispatch.getResource(), resource);
+    }
   },
 
   '#setResource( Array resource )': {
     'is a valid non empty array': {
-      'should set the resource': 'pending'
+      'should set the resource': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        var resource = ["asdf"];
+        dispatch.setResource(resource);
+        assert.equal(dispatch.getResource(), resource);
+      }
     },
 
     'is null': {
-      'should clean the resource': 'pending'
+      'should clean the resource': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setResource(["asdf"]);
+        dispatch.setResource(null);
+        assert.isNull(dispatch.getResource());
+      }
     },
 
-    'is not a valid non empty array': {
-      'should throw an exception': 'pending'
+    'is not an array': {
+      'should throw a JSTPInvalidResourceHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setResource(456);
+        }, jstp.JSTPInvalidResourceHeaderDefinition);
+      }
+    },
+
+    'is an empty array': {
+      'should throw a JSTPInvalidResourceHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setResource([]);
+        }, jstp.JSTPInvalidResourceHeaderDefinition);
+      }
     }
   },  
 
