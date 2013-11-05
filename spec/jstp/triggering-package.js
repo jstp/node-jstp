@@ -220,6 +220,12 @@ vows.describe('JSTPTriggeringPackage').addBatch({
     'there is an answer with transaction and triggering IDs': {
       'should prepare the JSTPDispatch answer and call the engine with the data': 'pending',
       'should set the From Header accordingly with the current Emitter': 'pending'
+    }, 
+    'there is no dispatch nor answer set': {
+      'should throw a JSTPMissingDispatch exception': 'pending'
+    },
+    'there is no transaction and triggering IDs': {
+      'should throw a JSTPImpossibleToAnswer exception': 'pending'
     }
   },
 
