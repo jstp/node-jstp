@@ -296,14 +296,40 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getBody()': {
-    'should return the body': 'pending',
+    'should return the body': function () {
+      var dispatch = new jstp.JSTPDispatch();
+      var body = {
+        its: "something!"
+      }
+      dispatch.setBody(body);
+      assert.equal(dispatch.getBody(), body);
+    },
     'no Body is set': {
-      'should return null': 'pending'
+      'should return null': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.isNull(dispatch.getBody());
+      }
     }
   },
 
   '#setBody( Object body )': {
-    'should set the body': 'pending'
+    'should set the body': function () {
+      var dispatch = new jstp.JSTPDispatch();
+      var body = {
+        its: "something!"
+      }
+      dispatch.setBody(body);
+      assert.equal(dispatch.getBody(), body);
+    },
+
+    'is a function': {
+      'should throw a JSTPInvalidBodyHeaderDefinition': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setBody(function () {});
+        }, jstp.JSTPInvalidBodyHeaderDefinition);
+      }
+    }
   },
 
   '#getEndpoint()': {
