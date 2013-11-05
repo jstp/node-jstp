@@ -275,23 +275,57 @@ vows.describe('JSTPDispatch').addBatch({
   }, 
 
   '#getTo()': {
-    'should return the Array to': 'pending',
+    'should return the Array to': function () {
+      var dispatch  = new jstp.JSTPDispatch();
+      var to        = ["valid"];
+      dispatch.setTo(to);
+      assert.equal(dispatch.getTo(), to);
+    },
     'no To is set': {
-      'should return an empty array': 'pending'
+      'should return an empty array': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.isArray(dispatch.getTo());
+        assert.equal(dispatch.getTo().length, 0);
+      }
     }
   },
 
   '#setTo( Array<String> to )': {
     'is a valid array of strings': {
-      'should set the to': 'pending'
+      'should set the to': function () {
+        var dispatch  = new jstp.JSTPDispatch();
+        var to        = ["valid"];
+        dispatch.setTo(to);
+        assert.equal(dispatch.getTo(), to);
+      }
     },
 
     'is null': {
-      'should clean the to': 'pending'
+      'should return an empty array': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setTo(["lala"]);
+        dispatch.setTo();
+        assert.isArray(dispatch.getTo());
+        assert.equal(dispatch.getTo().length, 0);
+      }
     },
 
-    'is not a valid array of strings': {
-      'should throw an exception': 'pending'
+    'is not an array': {
+      'should throw a JSTPInvalidToHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setTo("anything else");
+        }, jstp.JSTPInvalidToHeaderDefinition);
+      }
+    },
+
+    'is not an array of only strings': {
+      'should throw a JSTPInvalidToHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setTo([null, 123]);
+        }, jstp.JSTPInvalidToHeaderDefinition);
+      }
     }
   },
 
