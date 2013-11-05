@@ -282,23 +282,58 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getFrom()': {
-    'should return the Array from': 'pending',
+    'should return the Array from': function () {
+      var dispatch  = new jstp.JSTPDispatch;
+      var whereFrom = ["over there"]
+      dispatch.setFrom(whereFrom);
+      assert.equal(dispatch.getFrom(), whereFrom);
+    },
     'no From is set': {
-      'should return an empty array': 'pending'
+      'should return an empty array': function () {
+        var dispatch = new jstp.JSTPDispatch;
+        assert.isArray(dispatch.getFrom());
+        assert.equal(dispatch.getFrom().length, 0);
+      }
     }
   },
 
   '#setFrom( Array<String> from )': {
     'is a valid array of strings': {
-      'should set the from': 'pending'
+      'should set the from': function () {
+        var dispatch  = new jstp.JSTPDispatch;
+        var whereFrom = ["over there"]
+        dispatch.setFrom(whereFrom);
+        assert.equal(dispatch.getFrom(), whereFrom);
+      }
     },
 
     'is null': {
-      'should clean the from': 'pending'
+      'should set the from to an empty array': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        var whereFrom = ["right here"];
+        dispatch.setFrom(whereFrom);
+        dispatch.setFrom(null);
+        assert.isArray(dispatch.getFrom());
+        assert.equal(dispatch.getFrom().length, 0);
+      }
     },
 
-    'is not a valid array of strings': {
-      'should throw an exception': 'pending'
+    'is not an array': {
+      'should throw a JSTPInvalidFromHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setFrom("notAnArray");
+        }, jstp.JSTPInvalidFromHeaderDefinition);
+      }
+    },
+
+    'has elements which are not strings': {
+      'should throw a JSTPInvalidFromHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setFrom([3454235, "231"]);
+        }, jstp.JSTPInvalidFromHeaderDefinition);
+      }
     }
   },
 
