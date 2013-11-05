@@ -109,3 +109,9 @@ vows.describe('JSTPInvalidBodyHeaderDefinition').addBatch({
     assert.isFunction(jstp.JSTPInvalidBodyHeaderDefinition);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidToHeaderDefinition').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidToHeaderDefinition);
+  }
+}).export(module); 
