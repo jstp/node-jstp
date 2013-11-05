@@ -8,11 +8,11 @@ vows.describe('JSTPEngine').addBatch({
       'should do processing': 'pending'
     },
 
-    '( JSTPDispatch dispatch, JSTPCallback callback )': {
+    '( JSTPDispatch dispatch, JSTPCallable callback )': {
       'should do processing': 'pending'      
     },
 
-    '( JSTPDispatch dispatch, JSTPCallback callback, Object context )': {
+    '( JSTPDispatch dispatch, JSTPCallable callback, Object context )': {
       'should do processing': 'pending'      
     }
   }
