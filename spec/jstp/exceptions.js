@@ -121,3 +121,9 @@ vows.describe('JSTPInvalidEndpointHeaderDefinition').addBatch({
     assert.isFunction(jstp.JSTPInvalidEndpointHeaderDefinition);
   }
 }).export(module); 
+
+vows.describe('JSTPUnrecognizedProtocol').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPUnrecognizedProtocol);
+  }
+}).export(module); 
