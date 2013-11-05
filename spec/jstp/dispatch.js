@@ -487,7 +487,11 @@ vows.describe('JSTPDispatch').addBatch({
     },
 
     'has not the ANSWER method': {
-      'should return false': 'pending'
+      'should return false': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod("SOMETHING");
+        assert.isFalse(dispatch.isOfAnswerMorphology());
+      }
     }
   },
 
