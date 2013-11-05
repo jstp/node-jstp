@@ -55,3 +55,9 @@ vows.describe('JSTPInvalidArgumentForSetDispatch').addBatch({
     assert.isFunction(jstp.JSTPInvalidArgumentForSetDispatch);
   }
 }).export(module); 
+
+vows.describe('JSTPMissingDispatch').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPMissingDispatch);
+  }
+}).export(module); 
