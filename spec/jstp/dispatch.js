@@ -9,6 +9,10 @@ vows.describe('JSTPDispatch').addBatch({
       var protocol = ["JSTP", "0.6"]
       dispatch.setProtocol(protocol);
       assert.equal(dispatch.getProtocol(), protocol);
+    },
+
+    'no protocol is set': {
+      'should return the default': 'pending'
     }
   },
 
@@ -23,12 +27,14 @@ vows.describe('JSTPDispatch').addBatch({
     },
 
     'is null': {
-      'should clean the protocol': function () {
+      'should restore the protocol to the default': function () {
         var dispatch = new jstp.JSTPDispatch();
-        var protocol = ["JSTP", "0.6"];
+        var protocol = ["JSTP", "0.4"];
         dispatch.setProtocol(protocol);
         dispatch.setProtocol(null);
-        assert.isNull(dispatch.getProtocol());
+        assert.equal(dispatch.getProtocol()[0], "JSTP");
+        assert.equal(dispatch.getProtocol()[1], "0.6");
+        assert.equal(dispatch.getProtocol().length, 2);
       }
     },
 
@@ -110,6 +116,10 @@ vows.describe('JSTPDispatch').addBatch({
       var resource = ["sfdas"];
       dispatch.setResource(resource);
       assert.equal(dispatch.getResource(), resource);
+    },
+
+    'no resource is set': {
+      'should return the default': 'pending'
     }
   },
 
@@ -124,11 +134,11 @@ vows.describe('JSTPDispatch').addBatch({
     },
 
     'is null': {
-      'should clean the resource': function () {
+      'should set the resource to an empty array': function () {
         var dispatch = new jstp.JSTPDispatch();
         dispatch.setResource(["asdf"]);
         dispatch.setResource(null);
-        assert.isNull(dispatch.getResource());
+        assert.equal(dispatch.getResource().length, 0);
       }
     },
 
@@ -137,15 +147,6 @@ vows.describe('JSTPDispatch').addBatch({
         var dispatch = new jstp.JSTPDispatch();
         assert.throws(function () {
           dispatch.setResource(456);
-        }, jstp.JSTPInvalidResourceHeaderDefinition);
-      }
-    },
-
-    'is an empty array': {
-      'should throw a JSTPInvalidResourceHeaderDefinition exception': function () {
-        var dispatch = new jstp.JSTPDispatch();
-        assert.throws(function () {
-          dispatch.setResource([]);
         }, jstp.JSTPInvalidResourceHeaderDefinition);
       }
     }
@@ -157,6 +158,10 @@ vows.describe('JSTPDispatch').addBatch({
       var now       = new Date().getTime();
       dispatch.setTimestamp(now);
       assert.equal(dispatch.getTimestamp(), now);
+    },
+
+    'no timestamp is set': {
+      'should return the current time': 'pending'
     }
   },
 
@@ -171,11 +176,13 @@ vows.describe('JSTPDispatch').addBatch({
     },
 
     'is null': {
-      'should clean the timestamp': function () {
+      'should set the timestamp to the current time': function () {
         var dispatch = new jstp.JSTPDispatch();
-        dispatch.setTimestamp(new Date().getTime());
+        var formerTime = new Date().getTime() - 20000;
+        dispatch.setTimestamp(formerTime);
         dispatch.setTimestamp(null);
-        assert.isNull(dispatch.getTimestamp());
+        assert.isTrue(dispatch.getTimestamp() > formerTime);
+        assert.isTrue(dispatch.getTimestamp() < formerTime + 50000);
       }
     },
 
@@ -190,7 +197,10 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getToken()': {
-    'should return the Array token': 'pending'
+    'should return the Array token': 'pending',
+    'no token is set': {
+      'should return an empty array': 'pending'
+    }
   },
 
   '#setToken( Array<String> token )': {
@@ -208,7 +218,10 @@ vows.describe('JSTPDispatch').addBatch({
   }, 
 
   '#getTo()': {
-    'should return the Array to': 'pending'
+    'should return the Array to': 'pending',
+    'no To is set': {
+      'should return an empty array': 'pending'
+    }
   },
 
   '#setTo( Array<String> to )': {
@@ -226,7 +239,10 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getBody()': {
-    'should return the body': 'pending'
+    'should return the body': 'pending',
+    'no Body is set': {
+      'should return null': 'pending'
+    }
   },
 
   '#setBody( Object body )': {
@@ -252,7 +268,10 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getFrom()': {
-    'should return the Array from': 'pending'
+    'should return the Array from': 'pending',
+    'no From is set': {
+      'should return an empty array': 'pending'
+    }
   },
 
   '#setFrom( Array<String> from )': {
