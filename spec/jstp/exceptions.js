@@ -91,3 +91,9 @@ vows.describe('JSTPInvalidStatusCode').addBatch({
     assert.isFunction(jstp.JSTPInvalidStatusCode);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidTokenHeaderDefinition').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidTokenHeaderDefinition);
+  }
+}).export(module); 
