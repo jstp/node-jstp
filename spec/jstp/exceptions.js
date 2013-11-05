@@ -67,3 +67,9 @@ vows.describe('JSTPNotADispatch').addBatch({
     assert.isFunction(jstp.JSTPNotADispatch);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidFromHeaderDefinition').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidFromHeaderDefinition);
+  }
+}).export(module); 
