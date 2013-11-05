@@ -61,3 +61,9 @@ vows.describe('JSTPMissingDispatch').addBatch({
     assert.isFunction(jstp.JSTPMissingDispatch);
   }
 }).export(module); 
+
+vows.describe('JSTPNotADispatch').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPNotADispatch);
+  }
+}).export(module); 
