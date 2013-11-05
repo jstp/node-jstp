@@ -211,21 +211,330 @@ vows.describe('JSTPTriggeringPackage').addBatch({
       assert.equal(triggeringPackage.getCurrentEmitter(), "myEmitter");
     }
   },
+  '#answer': {
+    'no arguments': {
+      'should throw a JSTPMissingStatusCode exception': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+        assert.throws(function () {
+          triggeringPackage.answer();
+        }, jstp.JSTPMissingStatusCode);
+      }
+    },
 
-  '#answer( Integer statusCode, Object body [, JSTPCallable callback [, Object context ]])': {
-    'there is a dispatch with transaction and triggering IDs': {
-      'should prepare the JSTPDispatch answer and call the engine with the data': 'pending',
-      'should set the From Header accordingly with the current Emitter': 'pending'
+    'first argument is not a number': {
+      'should throw a JSTPInvalidStatusCode exception': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+        assert.throws(function () {
+          triggeringPackage.answer("notAStatusCode");
+        }, jstp.JSTPInvalidStatusCode);
+      }
     },
-    'there is an answer with transaction and triggering IDs': {
-      'should prepare the JSTPDispatch answer and call the engine with the data': 'pending',
-      'should set the From Header accordingly with the current Emitter': 'pending'
-    }, 
-    'there is no dispatch nor answer set': {
-      'should throw a JSTPMissingDispatch exception': 'pending'
+
+    '( Integer statusCode )': {
+      'there is a dispatch with transaction and triggering IDs': {
+        'should prepare the JSTPDispatch answer and call the engine with the data': function () {
+          var statusCode = 404;
+          var sourceDispatch = new jstp.JSTPDispatch();
+          var token = ["transactionID", "triggeringID"];
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = {
+            dispatch: function (dispatch) {
+              this.dispatchWasCalled = true;
+              assert.equal(dispatch.getResource()[0], statusCode);
+              assert.equal(dispatch.getResource()[1], token[0]);
+              assert.equal(dispatch.getResource()[2], token[1]);
+            }
+          }
+
+          var triggeringPackage = new  jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+          triggeringPackage.answer(statusCode);
+
+          assert.isTrue(mockEngine.dispatchWasCalled);
+        },
+
+        'should set the From Header accordingly with the current Emitter': function () {
+          var statusCode = 404;
+          var sourceDispatch = new jstp.JSTPDispatch();
+          var token = ["transactionID", "triggeringID"];
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = {
+            dispatch: function (dispatch) {
+              this.dispatchWasCalled = true;
+              assert.equal(dispatch.getResource()[0], statusCode);
+              assert.equal(dispatch.getResource()[1], token[0]);
+              assert.equal(dispatch.getResource()[2], token[1]);
+              assert.equal(dispatch.getFrom()[0], "emitter");
+            }
+          }
+
+          var triggeringPackage = new  jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+          triggeringPackage.answer(statusCode);
+
+          assert.isTrue(mockEngine.dispatchWasCalled);
+        },
+      },
+
+      'there is no dispatch nor answer set': {
+        'should throw a JSTPMissingDispatch exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          assert.throws(function () {
+            triggeringPackage.answer(200);
+          }, jstp.JSTPMissingDispatch);
+        }
+      },
+
+      'there is no transaction and triggering IDs': {
+        'should throw a JSTPImpossibleToAnswer exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          var sourceDispatch = new jstp.JSTPDispatch();
+          sourceDispatch.validate = function () {};
+          triggeringPackage.setDispatch(sourceDispatch);
+
+          assert.throws(function () {
+            triggeringPackage.answer(200);
+          }, jstp.JSTPImpossibleToAnswer);
+        }
+      }
     },
-    'there is no transaction and triggering IDs': {
-      'should throw a JSTPImpossibleToAnswer exception': 'pending'
+
+    '( Integer statusCode, Object body )': {
+      'there is a dispatch with transaction and triggering IDs': {
+        'should prepare the JSTPDispatch answer and call the engine with the data': function () {
+          var statusCode      = 404;
+          var sourceDispatch  = new jstp.JSTPDispatch();
+          var token           = ["transactionID", "triggeringID"];
+          var body            = "Some body";
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = {
+            dispatch: function (dispatch) {
+              this.dispatchWasCalled = true;
+              assert.equal(dispatch.getResource()[0], statusCode);
+              assert.equal(dispatch.getResource()[1], token[0]);
+              assert.equal(dispatch.getResource()[2], token[1]);
+              assert.equal(dispatch.getBody(), body);
+            }
+          }
+
+          var triggeringPackage = new  jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+          triggeringPackage.answer(statusCode, body);
+
+          assert.isTrue(mockEngine.dispatchWasCalled);
+        }, 
+
+        'should set the From Header accordingly with the current Emitter': function () {
+          var statusCode      = 404;
+          var sourceDispatch  = new jstp.JSTPDispatch();
+          var token           = ["transactionID", "triggeringID"];
+          var body            = "Some body";
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = {
+            dispatch: function (dispatch) {
+              this.dispatchWasCalled = true;
+              assert.equal(dispatch.getResource()[0], statusCode);
+              assert.equal(dispatch.getResource()[1], token[0]);
+              assert.equal(dispatch.getResource()[2], token[1]);
+              assert.equal(dispatch.getFrom()[0], "emitter");
+              assert.equal(dispatch.getBody(), body);
+            }
+          }
+
+          var triggeringPackage = new  jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+          triggeringPackage.answer(statusCode, body);
+
+          assert.isTrue(mockEngine.dispatchWasCalled);
+        },
+
+      },
+
+      'there is no dispatch nor answer set': {
+        'should throw a JSTPMissingDispatch exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          assert.throws(function () {
+            triggeringPackage.answer(200, {});
+          }, jstp.JSTPMissingDispatch);
+        }
+      },
+
+      'there is no transaction and triggering IDs': {
+        'should throw a JSTPImpossibleToAnswer exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          var sourceDispatch = new jstp.JSTPDispatch();
+          sourceDispatch.validate = function () {};
+          triggeringPackage.setDispatch(sourceDispatch);
+          
+          assert.throws(function () {
+            triggeringPackage.answer(200, {});
+          }, jstp.JSTPImpossibleToAnswer);
+        }
+      }
+
+    },
+
+    '( Integer statusCode, Object body, JSTPCallable callback )': {
+      'there is a dispatch with transaction and triggering IDs': {
+        'should prepare the JSTPDispatch answer and call the engine with the data': function () {
+          var statusCode      = 404;
+          var sourceDispatch  = new jstp.JSTPDispatch();
+          var token           = ["transactionID", "triggeringID"];
+          var body            = "Some body";
+          var theCallback        = function () {};
+
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = {
+            dispatch: function (dispatch, callback) {
+              this.dispatchWasCalled = true;
+              assert.equal(dispatch.getResource()[0], statusCode);
+              assert.equal(dispatch.getResource()[1], token[0]);
+              assert.equal(dispatch.getResource()[2], token[1]);
+              assert.equal(dispatch.getBody(), body);
+              assert.equal(callback, theCallback);
+            }
+          }
+
+          var triggeringPackage = new  jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+          triggeringPackage.answer(statusCode, body, theCallback);
+
+          assert.isTrue(mockEngine.dispatchWasCalled);
+        }
+      },
+
+      'there is no dispatch nor answer set': {
+        'should throw a JSTPMissingDispatch exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          assert.throws(function () {
+            triggeringPackage.answer(200, {}, function () {});
+          }, jstp.JSTPMissingDispatch);
+        }
+      },
+
+      'there is no transaction and triggering IDs': {
+        'should throw a JSTPImpossibleToAnswer exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          var sourceDispatch = new jstp.JSTPDispatch();
+          sourceDispatch.validate = function () {};
+          triggeringPackage.setDispatch(sourceDispatch);
+          
+          assert.throws(function () {
+            triggeringPackage.answer(200, {}, function () {});
+          }, jstp.JSTPImpossibleToAnswer);
+        }
+      },
+
+      'the callback has no .call method': {
+        'should throw a JSTPNotCallable exception': function () {
+          var statusCode      = 404;
+          var sourceDispatch  = new jstp.JSTPDispatch();
+          var token           = ["transactionID", "triggeringID"];
+          var body            = "Some body";
+          var theCallback     = "something";
+
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = { dispatch: function (dispatch, callback) {} };
+
+          var triggeringPackage = new jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+
+          assert.throws(function () {
+            triggeringPackage.answer(statusCode, body, theCallback);
+          }, jstp.JSTPNotCallable);
+        }
+      }
+    },
+
+    '( Integer statusCode, Object body, JSTPCallable callback, Object context )': {
+
+      'there is a dispatch with transaction and triggering IDs': {
+        'should prepare the JSTPDispatch answer and call the engine with the data': function () {
+          var statusCode      = 404;
+          var sourceDispatch  = new jstp.JSTPDispatch();
+          var token           = ["transactionID", "triggeringID"];
+          var body            = "Some body";
+          var theCallback     = function () {};
+          var theContext      = {"my": "context"};
+
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = {
+            dispatch: function (dispatch, callback, context) {
+              this.dispatchWasCalled = true;
+              assert.equal(dispatch.getResource()[0], statusCode);
+              assert.equal(dispatch.getResource()[1], token[0]);
+              assert.equal(dispatch.getResource()[2], token[1]);
+              assert.equal(dispatch.getBody(), body);
+              assert.equal(context, theContext);
+              assert.equal(callback, theCallback);
+            }
+          }
+
+          var triggeringPackage = new  jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+          triggeringPackage.answer(statusCode, body, theCallback, theContext);
+
+          assert.isTrue(mockEngine.dispatchWasCalled);
+        },
+      },
+
+      'there is no dispatch nor answer set': {
+        'should throw a JSTPMissingDispatch exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          assert.throws(function () {
+            triggeringPackage.answer(200, {}, function () {}, {});
+          }, jstp.JSTPMissingDispatch);
+        }
+      },
+
+      'there is no transaction and triggering IDs': {
+        'should throw a JSTPImpossibleToAnswer exception': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage({}, "emitter");
+          var sourceDispatch = new jstp.JSTPDispatch();
+          sourceDispatch.validate = function () {};
+          triggeringPackage.setDispatch(sourceDispatch);
+          
+          assert.throws(function () {
+            triggeringPackage.answer(200, {}, function () {}, {});
+          }, jstp.JSTPImpossibleToAnswer);
+        }
+      },
+
+      'the callback has no .call method': {
+        'should throw a JSTPNotCallable exception': function () {         
+          var statusCode      = 404;
+          var sourceDispatch  = new jstp.JSTPDispatch();
+          var token           = ["transactionID", "triggeringID"];
+          var body            = "Some body";
+          var theCallback     = "something";
+
+          sourceDispatch.setToken(token);
+          sourceDispatch.validate = function () {};
+
+          var mockEngine = { dispatch: function (dispatch, callback) {} };
+
+          var triggeringPackage = new jstp.JSTPTriggeringPackage(mockEngine, "emitter");
+          triggeringPackage.setDispatch(sourceDispatch);
+
+          assert.throws(function () {
+            triggeringPackage.answer(statusCode, body, theCallback, {});
+          }, jstp.JSTPNotCallable);
+        }
+      }
     }
   },
 
