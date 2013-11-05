@@ -73,3 +73,9 @@ vows.describe('JSTPInvalidFromHeaderDefinition').addBatch({
     assert.isFunction(jstp.JSTPInvalidFromHeaderDefinition);
   }
 }).export(module); 
+
+vows.describe('JSTPNotCallable').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPNotCallable);
+  }
+}).export(module); 
