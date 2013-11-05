@@ -367,20 +367,47 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getEndpoint()': {
-    'should return the JSTPEndpoint endpoint': 'pending'
+    'should return the JSTPEndpoint endpoint': function () {
+      var dispatch = new jstp.JSTPDispatch();
+      var endpoint = new jstp.JSTPEndpoint();
+      dispatch.setEndpoint(endpoint);
+      assert.equal(dispatch.getEndpoint(), endpoint);      
+    },
+
+    'there is no endpoint set': {
+      'should return null': function () {
+        var dispatch = new jstp.JSTPDispatch();
+      }
+    }
   },
 
   '#setEndpoint( JSTPEndpoint endpoint )': {
     'is a valid JSTPEndpoint': {
-      'should set the endpoint': 'pending'
+      'should set the endpoint': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        var endpoint = new jstp.JSTPEndpoint();
+        dispatch.setEndpoint(endpoint);
+        assert.equal(dispatch.getEndpoint(), endpoint);
+      }
     },
 
     'is null': {
-      'should clean the endpoint': 'pending'
+      'should clean the endpoint': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        var endpoint = new jstp.JSTPEndpoint();
+        dispatch.setEndpoint(endpoint);
+        dispatch.setEndpoint();
+        assert.isNull(dispatch.getEndpoint());
+      }
     },
 
     'is not a valid JSTPEndpoint': {
-      'should throw an exception': 'pending'
+      'should throw an exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setEndpoint("notAnEndpoint");
+        }, jstp.JSTPInvalidEndpointHeaderDefinition);
+      }
     }
   },
 
