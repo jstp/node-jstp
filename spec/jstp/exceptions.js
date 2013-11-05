@@ -97,3 +97,9 @@ vows.describe('JSTPInvalidTokenHeaderDefinition').addBatch({
     assert.isFunction(jstp.JSTPInvalidTokenHeaderDefinition);
   }
 }).export(module); 
+
+vows.describe('JSTPImpossibleToAnswer').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPImpossibleToAnswer);
+  }
+}).export(module); 
