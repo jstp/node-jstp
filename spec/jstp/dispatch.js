@@ -152,20 +152,40 @@ vows.describe('JSTPDispatch').addBatch({
   },  
 
   '#getTimestamp()': {
-    'should return the Long timestamp': 'pending'
+    'should return the Long timestamp': function () {
+      var dispatch  = new jstp.JSTPDispatch();
+      var now       = new Date().getTime();
+      dispatch.setTimestamp(now);
+      assert.equal(dispatch.getTimestamp(), now);
+    }
   },
 
   '#setTimestamp( Long timestamp )': {
     'is a valid long': {
-      'should set the timestamp': 'pending'
+      'should set the timestamp': function () {
+        var dispatch  = new jstp.JSTPDispatch();
+        var now       = new Date().getTime();
+        dispatch.setTimestamp(now);
+        assert.equal(dispatch.getTimestamp(), now);
+      }
     },
 
     'is null': {
-      'should clean the timestamp': 'pending'
+      'should clean the timestamp': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setTimestamp(new Date().getTime());
+        dispatch.setTimestamp(null);
+        assert.isNull(dispatch.getTimestamp());
+      }
     },
 
-    'is not a valid long': {
-      'should throw an exception': 'pending'
+    'is not a valid number': {
+      'should throw an exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setTimestamp("NotANumber"); 
+        }, jstp.JSTPInvalidTimestampHeaderDefinition);
+      }
     }
   },
 
