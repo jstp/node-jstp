@@ -504,8 +504,26 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#isOfSubscriptionMorphology()': {    
-    'has the BIND method': 'pending',
-    'has the RELEASE method': 'pending',
-    'has neither the BIND nor the RELEASE method': 'pending'
+    'has the BIND method': {
+      'should return true': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod("BIND");
+        assert.isTrue(dispatch.isOfSubscriptionMorphology());
+      }
+    },
+    'has the RELEASE method': {
+      'should return true': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod("RELEASE");
+        assert.isTrue(dispatch.isOfSubscriptionMorphology());
+      }
+    },
+    'has neither the BIND nor the RELEASE method': {
+      'should return false': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod("DIFFERENT");
+        assert.isFalse(dispatch.isOfSubscriptionMorphology());
+      }      
+    }
   }
 }).export(module); 
