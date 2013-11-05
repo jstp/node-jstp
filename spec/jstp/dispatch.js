@@ -12,7 +12,12 @@ vows.describe('JSTPDispatch').addBatch({
     },
 
     'no protocol is set': {
-      'should return the default': 'pending'
+      'should return the default': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.equal(dispatch.getProtocol()[0], "JSTP");
+        assert.equal(dispatch.getProtocol()[1], "0.6");
+        assert.equal(dispatch.getProtocol().length, 2);
+      }
     }
   },
 
@@ -119,7 +124,11 @@ vows.describe('JSTPDispatch').addBatch({
     },
 
     'no resource is set': {
-      'should return the default': 'pending'
+      'should return the default': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.isArray(dispatch.getResource());
+        assert.equal(dispatch.getResource().length, 0);
+      }
     }
   },
 
@@ -161,7 +170,12 @@ vows.describe('JSTPDispatch').addBatch({
     },
 
     'no timestamp is set': {
-      'should return the current time': 'pending'
+      'should return the current time': function () {
+        var notQuiteNow = new Date().getTime() - 1000;
+        var dispatch = new jstp.JSTPDispatch();
+        assert.isTrue(dispatch.getTimestamp() > notQuiteNow);
+        assert.isTrue(dispatch.getTimestamp() < notQuiteNow + 3000);
+      }
     }
   },
 
