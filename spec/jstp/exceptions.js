@@ -43,3 +43,9 @@ vows.describe('JSTPInvalidResourceHeaderDefinition').addBatch({
     assert.isFunction(jstp.JSTPInvalidResourceHeaderDefinition);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidTimestampHeaderDefinition').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidTimestampHeaderDefinition);
+  }
+}).export(module); 
