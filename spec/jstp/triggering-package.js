@@ -55,8 +55,124 @@ vows.describe('JSTPTriggeringPackage').addBatch({
   },
 
   '#setDispatch( JSTPDispatch dispatch )': {
-    'is a valid non answer JSTPDispatch': {
-      'should set the dispatch': function () {
+    'is a JSTPDispatch': {
+      'not of Answer Morphology': {
+        'should set the dispatch': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+          var dispatch = new jstp.JSTPDispatch();
+          
+          dispatch.setMethod("GET");
+          dispatch.setResource(["test"]);
+          dispatch.setProtocol(["JSTP", "0.6"]);
+          dispatch.setTimestamp(new Date().getTime());
+          dispatch.validate = function () {}
+
+          triggeringPackage.setDispatch(dispatch);
+          assert.equal(triggeringPackage.getDispatch(), dispatch);
+        },
+        
+        'should not set the answer': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+          var dispatch = new jstp.JSTPDispatch();
+          
+          dispatch.setMethod("GET");
+          dispatch.setResource(["test"]);
+          dispatch.setProtocol(["JSTP", "0.6"]);
+          dispatch.setTimestamp(new Date().getTime());
+          dispatch.validate = function () {}
+
+          triggeringPackage.setDispatch(dispatch);
+          assert.isNull(triggeringPackage.getAnswer());
+        }
+      },
+
+      'of Answer Morphology': {
+        'should set the answer': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+          var dispatch = new jstp.JSTPDispatch();
+          
+          dispatch.setMethod("ANSWER");
+          dispatch.setResource([200, "423fweqrqwer", "341gwarewrre"]);
+          dispatch.setProtocol(["JSTP", "0.6"]);
+          dispatch.setTimestamp(new Date().getTime());
+          dispatch.validate = function () {}
+
+          triggeringPackage.setDispatch(dispatch);
+          assert.equal(triggeringPackage.getAnswer(), dispatch);          
+        },
+
+        'should not set the dispatch': function () {
+          var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+          var dispatch = new jstp.JSTPDispatch();
+          
+          dispatch.setMethod("ANSWER");
+          dispatch.setResource([200, "423fweqrqwer", "341gwarewrre"]);
+          dispatch.setProtocol(["JSTP", "0.6"]);
+          dispatch.setTimestamp(new Date().getTime());
+          dispatch.validate = function () {}
+
+          triggeringPackage.setDispatch(dispatch);
+          assert.isNull(triggeringPackage.getDispatch());
+        }
+      },
+
+      'it should call `validate()` on the JSTPDispatch': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod("GET");
+        dispatch.validate = function () { this.validateWasCalled = true; }
+        triggeringPackage.setDispatch(dispatch);
+        assert.isTrue(dispatch.validateWasCalled);
+      }
+    },
+
+    'is not a JSTPDispatch': {
+      'should throw a JSTPInvalidArgumentForSetDispatch error': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something");
+        assert.throws(function () {
+          triggeringPackage.setDispatch("notADispatch");
+        }, jstp.JSTPInvalidArgumentForSetDispatch);
+      }
+    }
+  },
+
+  '#getAnswer()': {
+    'there is an answer': {
+      'should return the JSTPDispatch answer': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+        var dispatch = new jstp.JSTPDispatch();
+        
+        dispatch.setMethod("ANSWER");
+        dispatch.setResource([200, "423fweqrqwer", "341gwarewrre"]);
+        dispatch.setProtocol(["JSTP", "0.6"]);
+        dispatch.setTimestamp(new Date().getTime());
+        dispatch.validate = function () {}
+
+        triggeringPackage.setDispatch(dispatch);
+        assert.equal(triggeringPackage.getAnswer(), dispatch);
+      }
+    },
+
+    'there is no answer': {
+      'should return null': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+        var dispatch = new jstp.JSTPDispatch();
+        
+        dispatch.setMethod("PUT");
+        dispatch.setResource(["341gwarewrre"]);
+        dispatch.setProtocol(["JSTP", "0.6"]);
+        dispatch.setTimestamp(new Date().getTime());
+        dispatch.validate = function () {}
+
+        triggeringPackage.setDispatch(dispatch);
+        assert.isNull(triggeringPackage.getAnswer());
+      }
+    }
+  },
+
+  '#getDispatch()': {
+    'there is a dispatch': {
+      'should return the JSTPDispatch dispatch': function () {
         var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
         var dispatch = new jstp.JSTPDispatch();
         
@@ -64,37 +180,27 @@ vows.describe('JSTPTriggeringPackage').addBatch({
         dispatch.setResource(["test"]);
         dispatch.setProtocol(["JSTP", "0.6"]);
         dispatch.setTimestamp(new Date().getTime());
+        dispatch.validate = function () {}        
 
         triggeringPackage.setDispatch(dispatch);
         assert.equal(triggeringPackage.getDispatch(), dispatch);
-      },
-      
-      'should not set the answer': 'pending'
-    },
-
-    'is a valid answer JSTPDispatch': {
-      'should set the answer': 'pending',
-      'should not set the dispatch': 'pending'
-    }
-  },
-
-  '#getAnswer()': {
-    'there is an answer': {
-      'should return the JSTPDispatch answer': 'pending'
-    },
-
-    'there is no answer': {
-      'should return null': 'pending'
-    }
-  },
-
-  '#getDispatch()': {
-    'there is a dispatch': {
-      'should return the JSTPDispatch dispatch': 'pending'
+      }
     },
 
     'there is no dispatch': {
-      'should return null': 'pending'
+      'should return null': function () {
+        var triggeringPackage = new jstp.JSTPTriggeringPackage( {}, "something" );
+        var dispatch = new jstp.JSTPDispatch();
+        
+        dispatch.setMethod("ANSWER");
+        dispatch.setResource([200, "423fweqrqwer", "341gwarewrre"]);
+        dispatch.setProtocol(["JSTP", "0.6"]);
+        dispatch.setTimestamp(new Date().getTime());
+        dispatch.validate = function () {}
+
+        triggeringPackage.setDispatch(dispatch);
+        assert.isNull(triggeringPackage.getDispatch());        
+      }
     }
   },
 
