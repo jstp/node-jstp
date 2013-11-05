@@ -79,3 +79,9 @@ vows.describe('JSTPNotCallable').addBatch({
     assert.isFunction(jstp.JSTPNotCallable);
   }
 }).export(module); 
+
+vows.describe('JSTPMissingStatusCode').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPMissingStatusCode);
+  }
+}).export(module); 
