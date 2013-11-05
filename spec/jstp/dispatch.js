@@ -496,15 +496,87 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#isOfRegularMorphology()': {
-    'has the GET method': 'pending',
-    'has the POST method': 'pending',
-    'has the PUT method': 'pending',
-    'has the PATCH method': 'pending',
-    'has the DELETE method': 'pending',
-    'has an unrecognized method': 'pending',
-    'has the ANSWER method': 'pending',
-    'has the BIND method': 'pending',
-    'has the RELEASE method': 'pending',
+    'has the GET method': {
+      'should return true': function () {        
+        assert.isTrue(
+          new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has the POST method': {
+      'should return true': function () {        
+        assert.isTrue(
+          new jstp.JSTPDispatch()
+            .setMethod("POST")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has the PUT method': {
+      'should return true': function () {        
+        assert.isTrue(
+          new jstp.JSTPDispatch()
+            .setMethod("PUT")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has the DELETE method': {
+      'should return true': function () {        
+        assert.isTrue(
+          new jstp.JSTPDispatch()
+            .setMethod("DELETE")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has the PATCH method': {
+      'should return true': function () {        
+        assert.isTrue(
+          new jstp.JSTPDispatch()
+            .setMethod("PATCH")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has an unrecognized method': {
+      'should return true': function () {        
+        assert.isTrue(
+          new jstp.JSTPDispatch()
+            .setMethod("UNRECOGNIZED")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has the BIND method': {
+      'should return false': function () {        
+        assert.isFalse(
+          new jstp.JSTPDispatch()
+            .setMethod("BIND")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has the RELEASE method': {
+      'should return false': function () {        
+        assert.isFalse(
+          new jstp.JSTPDispatch()
+            .setMethod("RELEASE")
+            .isOfRegularMorphology()
+        );
+      }
+    },
+    'has the ANSWER method': {
+      'should return false': function () {        
+        assert.isFalse(
+          new jstp.JSTPDispatch()
+            .setMethod("ANSWER")
+            .isOfRegularMorphology()
+        );
+      }
+    }
   },
 
   '#isOfSubscriptionMorphology()': {    
