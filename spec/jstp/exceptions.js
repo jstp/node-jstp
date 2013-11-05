@@ -115,3 +115,9 @@ vows.describe('JSTPInvalidToHeaderDefinition').addBatch({
     assert.isFunction(jstp.JSTPInvalidToHeaderDefinition);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidEndpointHeaderDefinition').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidEndpointHeaderDefinition);
+  }
+}).export(module); 
