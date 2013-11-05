@@ -211,23 +211,66 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getToken()': {
-    'should return the Array token': 'pending',
+    'should return the Array token': function () {
+      var dispatch = new jstp.JSTPDispatch();
+      var token = ["transID", "trigID"];
+      dispatch.setToken(token);
+      assert.equal(dispatch.getToken(), token);
+    },
     'no token is set': {
-      'should return an empty array': 'pending'
+      'should return an empty array': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.isArray(dispatch.getToken());
+        assert.equal(dispatch.getToken().length, 0);
+      }
     }
   },
 
   '#setToken( Array<String> token )': {
     'is a valid array of one or two strings': {
-      'should set the token': 'pending'
+      'should set the token': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        var token = ["transID", "trigID"];
+        dispatch.setToken(token);
+        assert.equal(dispatch.getToken(), token);
+      }
     },
 
     'is null': {
-      'should clean the token': 'pending'
+      'should set the token to an empty array': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setToken(["something"]);
+        dispatch.setToken();
+        assert.isArray(dispatch.getToken());
+        assert.equal(dispatch.getToken().length, 0);
+      }
     },
 
-    'is not a valid array of one or two strings': {
-      'should throw an exception': 'pending'
+    'is not an array': {
+      'should throw a JSTPInvalidTokenHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setToken("other stuff");
+        }, jstp.JSTPInvalidTokenHeaderDefinition);
+      }
+    },
+
+    'some element is not a string': {
+      'should throw a JSTPInvalidTokenHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setToken([null, 123]);
+        }, jstp.JSTPInvalidTokenHeaderDefinition);
+      },
+    },
+
+    'there are more than two strings': {
+      'should throw a JSTPInvalidTokenHeaderDefinition exception': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        assert.throws(function () {
+          dispatch.setToken(["one", "two", "invalid!"])
+        }, jstp.JSTPInvalidTokenHeaderDefinition);
+      }
     }
   }, 
 
