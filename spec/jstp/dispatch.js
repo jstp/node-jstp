@@ -277,5 +277,37 @@ vows.describe('JSTPDispatch').addBatch({
     'is not valid': {
       'TODO: list invalidity reasons': 'pending'
     }
+  },
+
+  '#isOfAnswerMorphology()': {
+    'has the ANSWER method': {
+      'should return true': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setMethod("ANSWER");
+        assert.isTrue(dispatch.isOfAnswerMorphology());
+      }
+    },
+
+    'has not the ANSWER method': {
+      'should return false': 'pending'
+    }
+  },
+
+  '#isOfRegularMorphology()': {
+    'has the GET method': 'pending',
+    'has the POST method': 'pending',
+    'has the PUT method': 'pending',
+    'has the PATCH method': 'pending',
+    'has the DELETE method': 'pending',
+    'has an unrecognized method': 'pending',
+    'has the ANSWER method': 'pending',
+    'has the BIND method': 'pending',
+    'has the RELEASE method': 'pending',
+  },
+
+  '#isOfSubscriptionMorphology()': {    
+    'has the BIND method': 'pending',
+    'has the RELEASE method': 'pending',
+    'has neither the BIND nor the RELEASE method': 'pending'
   }
 }).export(module); 
