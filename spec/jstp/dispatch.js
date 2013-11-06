@@ -490,6 +490,15 @@ vows.describe('JSTPDispatch').addBatch({
       },
 
       'is 0.6 version': {
+        'the Method is null': {
+          'should throw a JSTPMissingMethodHeader exception': function () {
+            var dispatch = new jstp.JSTPDispatch();
+            assert.throws(function () {
+              dispatch.validate();
+            }, jstp.JSTPMissingMethodHeader);
+          }
+        },
+
         'Answer Morphology': {          
           'the Endpoint is not null': {
             topic: new jstp.JSTPDispatch().setMethod("ANSWER"),
@@ -604,7 +613,7 @@ vows.describe('JSTPDispatch').addBatch({
               }
             }
           }
-        },
+        },        
 
         'Regular Morphology': {
           topic: new jstp.JSTPDispatch().setMethod("GET"),
