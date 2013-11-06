@@ -26,58 +26,66 @@ vows.describe('JSTPTransactionManager').addBatch({
   },
 
   '#start( JSTPDispatch dispatch )': {
-    'should set the Transaction ID in the dispatch': function () {
-      var dispatch            = new jstp.JSTPDispatch();
-      var transactionManager  = new jstp.JSTPTransactionManager(helper.engineStub);
+    'the dispatch has no Transaction ID': {
+      'should set the Transaction ID in the dispatch': function () {
+        var dispatch            = new jstp.JSTPDispatch();
+        var transactionManager  = new jstp.JSTPTransactionManager(helper.engineStub);
 
-      transactionManager.start(dispatch);
+        transactionManager.start(dispatch);
 
-      assert.isString(dispatch.getToken()[0]);
-      assert.isTrue(dispatch.getToken()[0].length > 0);
+        assert.isString(dispatch.getToken()[0]);
+        assert.isTrue(dispatch.getToken()[0].length > 0);
+      },
+
+      'should set the timeout for the Transaction ID': function () {
+        var dispatch            = new jstp.JSTPDispatch();
+        var transactionManager  = new jstp.JSTPTransactionManager(helper.engineStub);
+        var wasCalled           = false;
+        setTimeout = function (callback, time) {
+          wasCalled = true;
+          assert.equal(time, 10000);
+        }
+
+        transactionManager.start(dispatch);
+        assert.isTrue(wasCalled);
+      },
+
+      'should set the Transaction ID as a key to an Array in the list': function () {
+        var dispatch            = new jstp.JSTPDispatch();
+        var transactionManager  = new jstp.JSTPTransactionManager(helper.engineStub);
+
+        transactionManager.start(dispatch);
+
+        assert.isArray(transactionManager.list[dispatch.getToken()[0]]);
+      },
+
+      'should send the BIND ANSWER for the Transaction ID to the JSTPEngine': function () {
+        var dispatch            = new jstp.JSTPDispatch();
+        var engine              = {};
+        var transactionManager  = new jstp.JSTPTransactionManager(engine);
+
+        engine.dispatch = function (argDispatch, argCallback, argContext) {
+          this.dispatchWasCalled = true;
+          assert.equal(argDispatch.getMethod(), "BIND");
+          var endpoint = argDispatch.getEndpoint();
+          assert.equal(endpoint.getMethodPattern(), "ANSWER");
+          assert.equal(endpoint.getResourcePattern()[0], "*");
+          assert.equal(endpoint.getResourcePattern()[1], dispatch.getToken()[0]);
+          assert.equal(endpoint.getResourcePattern()[2], "*");
+        }
+
+        transactionManager.start(dispatch);
+        assert.isTrue(engine.dispatchWasCalled);
+      },
     },
 
-    'should set the timeout for the Transaction ID': function () {
-      var dispatch            = new jstp.JSTPDispatch();
-      var transactionManager  = new jstp.JSTPTransactionManager(helper.engineStub);
-      var wasCalled           = false;
-      setTimeout = function (callback, time) {
-        wasCalled = true;
-        assert.equal(time, 10000);
-      }
-
-      transactionManager.start(dispatch);
-      assert.isTrue(wasCalled);
+    'the dispatch has a Transaction ID': {
+      'should keep the Transaction ID': 'pending'
     },
 
-    'should set the Transaction ID as a key to an Array in the list': function () {
-      var dispatch            = new jstp.JSTPDispatch();
-      var transactionManager  = new jstp.JSTPTransactionManager(helper.engineStub);
-
-      transactionManager.start(dispatch);
-
-      assert.isArray(transactionManager.list[dispatch.getToken()[0]]);
-    },
-
-    'should send the BIND ANSWER for the Transaction ID to the JSTPSubscriptionManager': function () {
-      var dispatch            = new jstp.JSTPDispatch();
-      var engine              = {};
-      var transactionManager  = new jstp.JSTPTransactionManager(engine);
-
-      engine.dispatch = function (argDispatch, argCallback, argContext) {
-        this.dispatchWasCalled = true;
-        assert.equal(argDispatch.getMethod(), "BIND");
-        var endpoint = argDispatch.getAsEndpoint();
-        assert.equal(endpoint.getMethodHeader(), "ANSWER");
-        assert.equal(endpoint.getResourceHeader()[0], "*");
-        assert.equal(endpoint.getResourceHeader()[1], dispatch.getToken()[0]);
-        assert.equal(endpoint.getResourceHeader()[2], "*");
-      }
-
-      transactionManager.start(dispatch);
-      assert.isTrue(engine.dispatchWasCalled);
-    },
-
-    'what about the toPattern and fromPattern in the BIND ANSWER?': 'pending'
+    'the dispatch has a To Header': {
+      'should add the To Header to the BIND ANSWER': 'pending'
+    }
 
   },
 
