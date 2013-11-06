@@ -95,24 +95,50 @@ vows.describe('JSTPEndpoint').addBatch({
   },  
 
   '#getFromPattern()': {
-    'should return the Array fromPattern': 'pending'
+    'should return the Array fromPattern': function () {
+      var endpoint = new jstp.JSTPEndpoint();
+      var fromPattern = ["home"];
+      endpoint.setFromPattern(fromPattern);
+      assert.equal(endpoint.getFromPattern(), fromPattern);
+    }
   },
 
   '#setFromPattern( Array fromPattern )': {
     'is a valid non empty array': {
-      'should set the fromPattern': 'pending'
+      'should set the fromPattern': function () {
+        var endpoint = new jstp.JSTPEndpoint();
+        var fromPattern = ["home"];
+        endpoint.setFromPattern(fromPattern);
+        assert.equal(endpoint.getFromPattern(), fromPattern);        
+      }
     },
 
     'is null': {
-      'should clean the fromPattern': 'pending'
+      'should clean the fromPattern': function () {
+        var endpoint = new jstp.JSTPEndpoint();
+        var fromPattern = ["home"];
+        endpoint.setFromPattern(fromPattern);
+        endpoint.setFromPattern();
+        assert.isNull(endpoint.getFromPattern());
+      }
     },
 
     'is not an array': {
-      'should throw an Error': 'pending'
+      'should throw a JSTPInvalidFromPatternType': function () {
+        var endpoint = new jstp.JSTPEndpoint();
+        assert.throws(function () {
+          endpoint.setFromPattern("myGoodness");
+        }, jstp.JSTPInvalidFromPatternType);
+      }
     },
 
     'contains non string elements': {
-      'should throw an Error': 'pending'
+      'should throw a JSTPInvalidFromPatternType': function () {
+        var endpoint = new jstp.JSTPEndpoint();
+        assert.throws(function () {
+          endpoint.setFromPattern(["asdf", 123]);
+        }, jstp.JSTPInvalidFromPatternType);
+      }
     }
   },
 
