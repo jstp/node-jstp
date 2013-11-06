@@ -157,3 +157,9 @@ vows.describe('JSTPMissingEndpointInSubscription').addBatch({
     assert.isFunction(jstp.JSTPMissingEndpointInSubscription);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidResourceInSubscription').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidResourceInSubscription);
+  }
+}).export(module); 
