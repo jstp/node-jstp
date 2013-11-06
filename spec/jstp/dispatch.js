@@ -468,12 +468,177 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#validate()': {
-    'is valid': {
-      'should return true': 'pending'
+    topic: new jstp.JSTPDispatch(),
+
+    'is not recognizable protocol': {
+      'should throw an JSTPUnrecognizedProtocol exception': function (dispatch) {
+        dispatch.setProtocol(["HTTP", "0.4"]);
+        assert.throws(function () {
+          dispatch.validate();
+        }, jstp.JSTPUnrecognizedProtocol);
+      }
     },
 
-    'is not valid': {
-      'TODO: list invalidity reasons': 'pending'
+    'is a recognizable protocol': {
+      'is not a supported version': {
+        'should throw a JSTPUnsupportedProtocolVersion exception': function (dispatch) {
+          dispatch.setProtocol(["JSTP", "0.4"]);
+          assert.throws(function () {
+            dispatch.validate();
+          }, jstp.JSTPUnsupportedProtocolVersion);
+        }
+      },
+
+      'is 0.6 version': {
+        'Answer Morphology': {          
+          'the Endpoint is not null': {
+            topic: new jstp.JSTPDispatch().setMethod("ANSWER"),
+            
+            'should throw a JSTPInvalidEndpointInAnswer': function (dispatch) {
+              var endpoint = new jstp.JSTPEndpoint();
+              dispatch.setMethod("ANSWER");
+              dispatch.setEndpoint(endpoint);
+              assert.throws(function () {
+                dispatch.validate();
+              }, jstp.JSTPInvalidEndpointInAnswer);
+            }, 
+          },
+
+          'the Endpoint is null': {
+            topic: new jstp.JSTPDispatch().setMethod("ANSWER"),
+
+            'the Triggering ID is of invalid type': {
+              'should throw a JSTPInvalidResourceHeaderForAnswer': function (dispatch) {
+                dispatch.setResource([200, "transID", true]);
+                assert.throws(function () {
+                  dispatch.validate();
+                }, jstp.JSTPInvalidResourceHeaderForAnswer);
+              }
+            },
+
+            'the Transaction ID is of invalid type': {
+              'should throw a JSTPInvalidResourceHeaderForAnswer': function (dispatch) {
+                dispatch.setResource([200, true, "something"]);
+                assert.throws(function () {
+                  dispatch.validate();
+                }, jstp.JSTPInvalidResourceHeaderForAnswer);
+              }
+            },
+
+            'the Status Code is of invalid type': {
+              'should throw a JSTPInvalidStatusCode': function (dispatch) {
+                dispatch.setResource([true, 234, "something"]);
+                assert.throws(function () {
+                  dispatch.validate();
+                }, jstp.JSTPInvalidStatusCode);
+              }
+            },
+
+            'the Resource is empty': {
+              'should throw a JSTPInvalidResourceHeaderForAnswer': function (dispatch) {
+                dispatch.setResource([]);
+                assert.throws(function () {
+                  dispatch.validate();
+                }, jstp.JSTPInvalidResourceHeaderForAnswer);
+              }
+            },
+
+            'the Resource is correct': {
+              'the To Header is not empty': {
+                'should throw a JSTPInvalidToInAnswer': function (dispatch) {
+                  dispatch.setResource([200, "transID", "trigID"]);
+                  dispatch.setTo(["somestuff"]);
+                  assert.throws(function () {
+                    dispatch.validate();
+                  }, jstp.JSTPInvalidToInAnswer);
+                }
+              },
+
+              'the To Header is empty': {
+                'should return true': function (dispatch) {
+                  dispatch.setTo();
+                  assert.isTrue(dispatch.validate());
+                }
+              }
+            }
+          }
+        },
+
+        'Subscription Morphology': {
+          topic: new jstp.JSTPDispatch().setMethod("BIND"),
+
+          'the Endpoint is null': {
+            'should throw a JSTPMissingEndpointInSubscription': function (dispatch) {
+              assert.throws(function () {
+                dispatch.validate();
+              }, jstp.JSTPMissingEndpointInSubscription);
+            }
+          },
+
+          'the Endpoint is not null': {
+            topic: new jstp.JSTPDispatch().setMethod("RELEASE"),
+
+            'should call the #validate of the endpoint': function (dispatch) {
+              var endpoint = new jstp.JSTPEndpoint();
+              endpoint.validate = function () {
+                this.validateWasCalled = true;
+              }
+              dispatch.setEndpoint(endpoint);
+              dispatch.validate();
+              assert.isTrue(endpoint.validateWasCalled);
+            },
+
+            'the Resource is not empty': {
+              'should throw a JSTPInvalidResourceInSubscription': function (dispatch) {
+                dispatch.setResource(["something"]);
+                assert.throws(function () {
+                  dispatch.validate();
+                }, jstp.JSTPInvalidResourceInSubscription);
+              }
+            },
+
+            'the Resource is empty': {
+              'should return true': function (dispatch) {
+                dispatch.setResource();
+                assert.isTrue(dispatch.validate());
+              }
+            }
+          }
+        },
+
+        'Regular Morphology': {
+          topic: new jstp.JSTPDispatch().setMethod("GET"),
+
+          'the Endpoint is not null': {
+            'should throw a JSTPInvalidEndpointInRegular': function (dispatch) {
+              dispatch.setEndpoint(new jstp.JSTPEndpoint());
+              assert.throws(function () {
+                dispatch.validate();
+              }, jstp.JSTPInvalidEndpointInRegular);
+            }
+          },
+
+          'the Endpoint is null': {
+            topic: new jstp.JSTPDispatch().setMethod("PUT"),
+
+            'the Resource is empty': {
+              'should throw a JSTPMissingResourceInRegular': function (dispatch) {
+                assert.throws(function () {
+                  dispatch.validate();
+                }, jstp.JSTPMissingResourceInRegular);    
+              }
+            },
+
+            'the Resource is not empty': {
+              topic: new jstp.JSTPDispatch().setMethod("POST").setResource(["home"]),
+
+              'should return true': function (dispatch) {
+                assert.isTrue(dispatch.validate());
+              }
+            }
+          }
+        }
+      }
     }
   },
 
