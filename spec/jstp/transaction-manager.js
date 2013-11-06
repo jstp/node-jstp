@@ -116,9 +116,60 @@ vows.describe('JSTPTransactionManager').addBatch({
 
   },
 
-  '#newWithTriggeringID( JSTPDispatch dispatch ): JSTPDispatch new': {
-    'should return clone of the argument with the Triggering ID assigned': 'pending',
-    'should add the Triggering ID to the Transaction ID list': 'pending'
+  '#newWithTriggeringID( JSTPDispatch dispatch )': {
+    'the Transaction ID is set and in the list': {
+      topic: function () {
+        var engine = {
+          dispatch: function () {
+
+          }
+        };
+        var transactionManager = new jstp.JSTPTransactionManager(engine);
+        var oldDispatch = new jstp.JSTPDispatch();
+        transactionManager.start(oldDispatch);
+        return transactionManager
+      },
+
+      'should return clone of the argument with the Triggering ID assigned': function (transactionManager) {
+        var source = new jstp.JSTPDispatch();
+        source.setMethod("POST");
+        source.setResource(["spider"]);
+        source.setTimestamp(new Date().getTime());
+        source.setTo(['the moon']);
+        source.setFrom(['Buenos Aires']);
+
+        source.setToken([Object.keys(transactionManager.list)[0]]);
+
+        var clone = transactionManager.newWithTriggeringID( source );
+        assert.equal(clone.getMethod(), "POST");
+        assert.equal(clone.getResource()[0], "spider");
+        assert.equal(clone.getToken()[0], source.getToken()[0]);
+        assert.isString(clone.getToken()[1]);
+        assert.equal(clone.getTo()[0], "the moon");
+        assert.equal(clone.getFrom()[0], "Buenos Aires");
+      },
+
+      'should add the Triggering ID to the Transaction ID list': function (transactionManager) {
+        var source = new jstp.JSTPDispatch();
+        var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["spider"]);
+        source.setMethod("BIND");
+        source.setEndpoint(endpoint);
+        source.setTimestamp(new Date().getTime());
+        source.setTo(['the moon']);
+        source.setFrom(['Buenos Aires']);
+
+        source.setToken([Object.keys(transactionManager.list)[0]]);
+
+        var clone = transactionManager.newWithTriggeringID( source );
+        assert.equal(clone.getMethod(), "BIND");
+        assert.equal(clone.getEndpoint().getResourcePattern()[0], "spider");
+        assert.equal(clone.getToken()[0], source.getToken()[0]);
+        assert.isString(clone.getToken()[1]);
+        assert.equal(clone.getTo()[0], "the moon");
+        assert.equal(clone.getFrom()[0], "Buenos Aires");
+        assert.include(transactionManager.list[clone.getToken()[0]], clone.getToken()[1]);
+      }
+    }
   },
 
   '#received( JSTPDispatch answer )': {
