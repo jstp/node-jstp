@@ -94,6 +94,50 @@ vows.describe('JSTPEndpoint').addBatch({
     }
   },  
 
+  '#getFromPattern()': {
+    'should return the Array fromPattern': 'pending'
+  },
+
+  '#setFromPattern( Array fromPattern )': {
+    'is a valid non empty array': {
+      'should set the fromPattern': 'pending'
+    },
+
+    'is null': {
+      'should clean the fromPattern': 'pending'
+    },
+
+    'is not an array': {
+      'should throw an Error': 'pending'
+    },
+
+    'contains non string elements': {
+      'should throw an Error': 'pending'
+    }
+  },
+
+  '#getToPattern()': {
+    'should return the Array toPattern': 'pending'
+  },
+
+  '#setToPattern( Array toPattern )': {
+    'is a valid non empty array': {
+      'should set the toPattern': 'pending'
+    },
+
+    'is null': {
+      'should clean the toPattern': 'pending'
+    },
+
+    'is not an array': {
+      'should throw an Error': 'pending'
+    },
+
+    'contains non string elements': {
+      'should throw an Error': 'pending'
+    }
+  },
+
   '#validate()': {
     'is valid': {
       'should return true': function () {
