@@ -4,7 +4,14 @@ var vows    = require('vows')
 
 vows.describe('JSTPTransactionManager').addBatch({
   '#start( JSTPDispatch dispatch )': {
-    'should set the Transaction ID in the dispatch': 'pending',
+    'should set the Transaction ID in the dispatch': 'pending', /*function () {
+      var dispatch = new jstp.JSTPDispatch();
+      var transactionManager = new jstp.JSTPTransactionManager();
+      transactionManager.start(dispatch);
+      assert.isString(dispatch.getToken()[0]);
+      assert.isTrue(dispatch.getToken()[0].length > 0);
+    },*/
+
     'should set the timeout for the Transaction ID': 'pending',
     'should set the Transaction ID as a key to an Array': 'pending'
   },
@@ -29,6 +36,6 @@ vows.describe('JSTPTransactionManager').addBatch({
   },
 
   '#stop( String transactionID )': {
-    'should remove the transactionID key from the list': 'pending'
+    'should remove the transactionID key from the list': 'pending',
   }
 }).export(module);     

@@ -35,5 +35,9 @@ vows.describe('JSTPSubscriptionManager').addBatch({
     }
   },
 
-  '#trigger( JSTPDispatch )': 'pending'
+  '#trigger( JSTPDispatch )': {
+    'if it matches no endpoint': 'pending',
+
+    'if it matches an endpoint': 'pending'
+  }
 }).export(module);     
