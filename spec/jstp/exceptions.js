@@ -181,3 +181,9 @@ vows.describe('JSTPMissingMethodHeader').addBatch({
     assert.isFunction(jstp.JSTPMissingMethodHeader);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidFromPatternType').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidFromPatternType);
+  }
+}).export(module); 
