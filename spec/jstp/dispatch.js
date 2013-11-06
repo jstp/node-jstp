@@ -729,12 +729,49 @@ vows.describe('JSTPDispatch').addBatch({
             endpoint.getFromPattern()[0], 
             dispatch.getFrom()[0]
           );                            
-          
         }
       },
 
       'Method & Resource & To': {
-        'should return a JSTPEndpoint with the method, resource and to': 'pending'
+        'should return a JSTPEndpoint with the method, resource and to': function () {
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("POST")
+                             .setResource(["asdfasdf", 123])
+                             .setTo(["home"]);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getResource().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getResource()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getResource()[1]
+          );                            
+
+          assert.equal(
+            endpoint.getToPattern().length, 
+            dispatch.getTo().length
+          );
+          
+          assert.equal(
+            endpoint.getToPattern()[0], 
+            dispatch.getTo()[0]
+          );                            
+        }
       },
 
       'Method & Resource & To & From': {
