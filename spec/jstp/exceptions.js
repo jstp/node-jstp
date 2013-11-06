@@ -175,3 +175,9 @@ vows.describe('JSTPMissingResourceInRegular').addBatch({
     assert.isFunction(jstp.JSTPMissingResourceInRegular);
   }
 }).export(module); 
+
+vows.describe('JSTPMissingMethodHeader').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPMissingMethodHeader);
+  }
+}).export(module); 
