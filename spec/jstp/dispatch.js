@@ -651,6 +651,56 @@ vows.describe('JSTPDispatch').addBatch({
     }
   },
 
+  '#getAsEndpoint()': {
+    'it should call #validate': 'pending',
+
+    'Regular Morphology': {
+      'Method & Resource': {
+        'should return a JSTPEndpoint with the method and resource': 'pending'
+      },
+
+      'Method & Resource & From': {
+        'should return a JSTPEndpoint with the method, resource and from': 'pending'
+      },
+
+      'Method & Resource & To': {
+        'should return a JSTPEndpoint with the method, resource and to': 'pending'
+      },
+
+      'Method & Resource & To & From': {
+        'should return a JSTPEndpoint with the method, resource, to and from': 'pending'
+      }
+    },
+
+    'Answer Morphology': {
+      'Method & Resource': {
+        'should return a JSTPEndpoint with the method and resource': 'pending'
+      },
+
+      'Method & Resource & From': {        
+        'should return a JSTPEndpoint with the method, resource and from': 'pending'
+      }
+    },
+
+    'Subscription Morphology': {
+      'Method & Endpoint Resource': {
+        'should return a JSTPEndpoint with the method and endpoint resource': 'pending'
+      },
+
+      'Method & Endpoint Resource & From': {
+        'should return a JSTPEndpoint with the method, endpoint resource and from': 'pending'
+      },
+
+      'Method & Endpoint Resource & To': {
+        'should return a JSTPEndpoint with the method, endpoint resource and to': 'pending'
+      },
+
+      'Method & Endpoint Resource & To & From': {
+        'should return a JSTPEndpoint with the method, endpoint resource, to and from': 'pending'
+      }
+    }
+  },
+
   '#isOfAnswerMorphology()': {
     'has the ANSWER method': {
       'should return true': function () {
