@@ -652,15 +652,85 @@ vows.describe('JSTPDispatch').addBatch({
   },
 
   '#getAsEndpoint()': {
-    'it should call #validate': 'pending',
+    'it should call #validate': function () {
+      var dispatch = new jstp.JSTPDispatch()
+                         .setResource(["as"]);
+      dispatch.validate = function () {
+        this.validateWasCalled = true;
+      }
+
+      dispatch.getAsEndpoint();
+      assert.isTrue(dispatch.validateWasCalled);
+    },
 
     'Regular Morphology': {
       'Method & Resource': {
-        'should return a JSTPEndpoint with the method and resource': 'pending'
+        'should return a JSTPEndpoint with the method and resource': function () {
+          var dispatch = new jstp.JSTPDispatch()
+                            .setMethod("PUT")
+                            .setResource(["here"]);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getResource().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getResource()[0]
+          );
+        }
       },
 
       'Method & Resource & From': {
-        'should return a JSTPEndpoint with the method, resource and from': 'pending'
+        'should return a JSTPEndpoint with the method, resource and from': function () {
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("POST")
+                             .setResource(["asdfasdf", 123])
+                             .setFrom(["home"]);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getResource().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getResource()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getResource()[1]
+          );                            
+
+          assert.equal(
+            endpoint.getFromPattern().length, 
+            dispatch.getFrom().length
+          );
+          
+          assert.equal(
+            endpoint.getFromPattern()[0], 
+            dispatch.getFrom()[0]
+          );                            
+          
+        }
       },
 
       'Method & Resource & To': {
