@@ -173,7 +173,28 @@ vows.describe('JSTPTransactionManager').addBatch({
   },
 
   '#received( JSTPDispatch answer )': {
-    'should remove the Resource Triggering ID from the Transaction ID list': 'pending',
+    'the Transaction and Triggering IDs were loaded': {
+      'should remove the Resource Triggering ID from the Transaction ID list': function () {
+        var engine = {dispatch: function () {}}
+        var dispatch = new jstp.JSTPDispatch();
+        var transactionManager = new jstp.JSTPTransactionManager(engine);
+        transactionManager.start(dispatch);
+        var transactionID = Object.keys(transactionManager.list)[0];
+        var triggeringDispatch = new jstp.JSTPDispatch().setToken([transactionID]);
+        var cloneWithTriggeringID = transactionManager.newWithTriggeringID(triggeringDispatch);
+
+        var answer = new jstp.JSTPDispatch();
+        answer.setMethod("ANSWER");
+        answer.setResource(
+          [300, cloneWithTriggeringID.getToken()[0], cloneWithTriggeringID.getToken()[1]]);
+
+        transactionManager.received(answer);
+        assert.isTrue(
+          transactionManager.list[transactionID]
+            .indexOf(cloneWithTriggeringID.getToken()[1]) == -1);
+
+      }      
+    }
   },
 
   '#check( String transactionID )': {
