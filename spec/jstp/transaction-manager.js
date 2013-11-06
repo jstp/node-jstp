@@ -199,11 +199,29 @@ vows.describe('JSTPTransactionManager').addBatch({
 
   '#check( String transactionID )': {
     'if there are no Triggering IDs left in the list': {
-      'should call #stop with the transactionID': 'pending'
+      'should call #stop with the transactionID': function () {
+        var transactionManager = new jstp.JSTPTransactionManager({});
+        transactionManager.list["here"] = [];
+        transactionManager.stop = function (transactionID) {
+          this.stopWasCalled = true;
+          assert.equal(transactionID, "here");
+        }
+        transactionManager.check("here");
+        assert.isTrue(transactionManager.stopWasCalled);
+      }
     },
 
     'if there are Triggering IDs in the list': {
-      'should not call #stop': 'pending'
+      'should not call #stop': function () {
+        var transactionManager = new jstp.JSTPTransactionManager({});
+        transactionManager.list["here"] = ["Triggering"];
+        transactionManager.stop = function (transactionID) {
+          this.stopWasCalled = true;
+          assert.equal(transactionID, "here");
+        }
+        transactionManager.check("here");
+        assert.isUndefined(transactionManager.stopWasCalled);        
+      }
     }
   },
 
