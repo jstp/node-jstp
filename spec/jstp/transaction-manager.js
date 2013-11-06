@@ -80,11 +80,38 @@ vows.describe('JSTPTransactionManager').addBatch({
     },
 
     'the dispatch has a Transaction ID': {
-      'should keep the Transaction ID': 'pending'
+      'should keep the Transaction ID': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setToken(["transactionID"]);
+        var engine = {};
+        var transactionManager = new jstp.JSTPTransactionManager(engine);
+
+        engine.dispatch = function (argDispatch, argCallback, argContext) {
+          this.dispatchWasCalled = true;
+          var endpoint = argDispatch.getEndpoint();
+          assert.equal(endpoint.getResourcePattern()[1], "transactionID");
+        }
+
+        transactionManager.start(dispatch);
+        assert.isTrue(engine.dispatchWasCalled);
+      }
     },
 
     'the dispatch has a To Header': {
-      'should add the To Header to the BIND ANSWER': 'pending'
+      'should add the To Header to the BIND ANSWER': function () {
+        var dispatch = new jstp.JSTPDispatch();
+        dispatch.setTo(["melmak"]);
+        var engine = {};
+        var transactionManager = new jstp.JSTPTransactionManager(engine);
+
+        engine.dispatch = function (argDispatch, argCallback, argContext) {
+          this.dispatchWasCalled = true;
+          assert.equal(argDispatch.getTo()[0], "melmak");
+        }
+
+        transactionManager.start(dispatch);
+        assert.isTrue(engine.dispatchWasCalled);        
+      }
     }
 
   },
