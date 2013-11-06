@@ -133,3 +133,9 @@ vows.describe('JSTPUnsupportedProtocolVersion').addBatch({
     assert.isFunction(jstp.JSTPUnsupportedProtocolVersion);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidEndpointInAnswer').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidEndpointInAnswer);
+  }
+}).export(module); 
