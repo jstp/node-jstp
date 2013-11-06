@@ -775,35 +775,286 @@ vows.describe('JSTPDispatch').addBatch({
       },
 
       'Method & Resource & To & From': {
-        'should return a JSTPEndpoint with the method, resource, to and from': 'pending'
+        'should return a JSTPEndpoint with the method, resource, to and from': function () {
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("POST")
+                             .setResource(["asdfasdf", 123])
+                             .setFrom(["sweden"])
+                             .setTo(["home"]);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getResource().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getResource()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getResource()[1]
+          );                            
+
+          assert.equal(
+            endpoint.getToPattern().length, 
+            dispatch.getTo().length
+          );
+          
+          assert.equal(
+            endpoint.getToPattern()[0], 
+            dispatch.getTo()[0]
+          );  
+
+          assert.equal(
+            endpoint.getFromPattern().length, 
+            dispatch.getFrom().length
+          );
+          
+          assert.equal(
+            endpoint.getFromPattern()[0], 
+            dispatch.getFrom()[0]
+          );            
+        }
       }
     },
 
     'Answer Morphology': {
       'Method & Resource': {
-        'should return a JSTPEndpoint with the method and resource': 'pending'
+        'should return a JSTPEndpoint with the method and resource': function () {
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("ANSWER")
+                             .setResource([200, "asdfasdf", "asdfda"]);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getResource().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getResource()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getResource()[1]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[2], 
+            dispatch.getResource()[2]
+          );                     
+        }
       },
 
       'Method & Resource & From': {        
-        'should return a JSTPEndpoint with the method, resource and from': 'pending'
+        'should return a JSTPEndpoint with the method, resource and from': function () {
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("ANSWER")
+                             .setResource([404, "asdfasdf", "123"])
+                             .setFrom(["home"]);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getResource().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getResource()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getResource()[1]
+          );                            
+
+          assert.equal(
+            endpoint.getFromPattern().length, 
+            dispatch.getFrom().length
+          );
+          
+          assert.equal(
+            endpoint.getFromPattern()[0], 
+            dispatch.getFrom()[0]
+          );     
+        }
       }
     },
 
     'Subscription Morphology': {
       'Method & Endpoint Resource': {
-        'should return a JSTPEndpoint with the method and endpoint resource': 'pending'
+        'should return a JSTPEndpoint with the method and endpoint resource': function () {
+          var sourceEndpoint = new jstp.JSTPEndpoint()
+                                   .setMethodPattern("*")
+                                   .setResourcePattern(["anything"]);
+
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("BIND")
+                             .setEndpoint(sourceEndpoint);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getEndpoint().getResourcePattern().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getEndpoint().getResourcePattern()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getEndpoint().getResourcePattern()[1]
+          );                            
+
+          assert.equal(
+            endpoint.getFromPattern().length, 
+            dispatch.getFrom().length
+          );
+          
+          assert.equal(
+            endpoint.getFromPattern()[0], 
+            dispatch.getFrom()[0]
+          );     
+        }
       },
 
       'Method & Endpoint Resource & From': {
-        'should return a JSTPEndpoint with the method, endpoint resource and from': 'pending'
-      },
+        'should return a JSTPEndpoint with the method, endpoint resource and from': function () {
+          var sourceEndpoint = new jstp.JSTPEndpoint()
+                                   .setMethodPattern("*")
+                                   .setResourcePattern(["anything"]);
 
-      'Method & Endpoint Resource & To': {
-        'should return a JSTPEndpoint with the method, endpoint resource and to': 'pending'
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("BIND")
+                             .setEndpoint(sourceEndpoint)
+                             .setFrom(["mars"]);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getEndpoint().getResourcePattern().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getEndpoint().getResourcePattern()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getEndpoint().getResourcePattern()[1]
+          );                            
+
+          assert.equal(
+            endpoint.getFromPattern().length, 
+            dispatch.getFrom().length
+          );
+          
+          assert.equal(
+            endpoint.getFromPattern()[0], 
+            dispatch.getFrom()[0]
+          );               
+        }
       },
 
       'Method & Endpoint Resource & To & From': {
-        'should return a JSTPEndpoint with the method, endpoint resource, to and from': 'pending'
+        'should return a JSTPEndpoint with the method, endpoint resource and to': function () {
+          var sourceEndpoint = new jstp.JSTPEndpoint()
+                                   .setMethodPattern("*")
+                                   .setResourcePattern(["anything"]);
+
+          var dispatch = new jstp.JSTPDispatch()
+                             .setMethod("BIND")
+                             .setFrom(["mercury"])
+                             .setTo(["the sun"])                             
+                             .setEndpoint(sourceEndpoint);
+
+          dispatch.validate = function () {};
+
+          var endpoint = dispatch.getAsEndpoint();
+          assert.equal(
+            endpoint.getMethodPattern(), 
+            dispatch.getMethod()
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern().length, 
+            dispatch.getEndpoint().getResourcePattern().length
+          );
+          
+          assert.equal(
+            endpoint.getResourcePattern()[0], 
+            dispatch.getEndpoint().getResourcePattern()[0]
+          );                            
+          
+          assert.equal(
+            endpoint.getResourcePattern()[1], 
+            dispatch.getEndpoint().getResourcePattern()[1]
+          );                            
+
+          assert.equal(
+            endpoint.getFromPattern().length, 
+            dispatch.getFrom().length
+          );
+          
+          assert.equal(
+            endpoint.getFromPattern()[0], 
+            dispatch.getFrom()[0]
+          );                            
+
+          assert.equal(
+            endpoint.getToPattern().length, 
+            dispatch.getTo().length
+          );
+          
+          assert.equal(
+            endpoint.getToPattern()[0], 
+            dispatch.getTo()[0]
+          );               
+        }
       }
     }
   },
