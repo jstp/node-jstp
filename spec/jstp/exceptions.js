@@ -145,3 +145,9 @@ vows.describe('JSTPInvalidResourceHeaderForAnswer').addBatch({
     assert.isFunction(jstp.JSTPInvalidResourceHeaderForAnswer);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidToInAnswer').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidToInAnswer);
+  }
+}).export(module); 
