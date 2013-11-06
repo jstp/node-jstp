@@ -226,6 +226,15 @@ vows.describe('JSTPTransactionManager').addBatch({
   },
 
   '#stop( String transactionID )': {
-    'should remove the transactionID key from the list': 'pending',
+    'should remove the transactionID key from the list': function () {
+      var transactionManager = new jstp.JSTPTransactionManager({});
+      transactionManager.list["here"] = ["Triggering"];
+      transactionManager.stop("here");
+      assert.isUndefined(transactionManager.list["here"]);       
+    },
+
+    'should send the 100 Last Answer answer to the JSTPEngine (first in RFC)': 'pending',
+
+    'should send the RELEASE ANSWER for the Transaction ID to the JSTPEngine': 'pending'
   }
 }).export(module);     
