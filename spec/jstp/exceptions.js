@@ -127,3 +127,9 @@ vows.describe('JSTPUnrecognizedProtocol').addBatch({
     assert.isFunction(jstp.JSTPUnrecognizedProtocol);
   }
 }).export(module); 
+
+vows.describe('JSTPUnsupportedProtocolVersion').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPUnsupportedProtocolVersion);
+  }
+}).export(module); 
