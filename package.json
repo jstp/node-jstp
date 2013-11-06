@@ -1,7 +1,7 @@
 {
   "name": "jstp",
-  "description": "Node JSTP implementation",
-  "version": "1.1.5",
+  "description": "Node.js JSTP implementation",
+  "version": "2.0.0",
   "contributors": [
     {
       "name": "Fernando Vía Canel",
@@ -13,18 +13,13 @@
     }
   ],
   "dependencies": {
-    "faye-websocket":"0.5.0",
-    "cli-color":"0.2.2",
     "uuid": "1.4.1"
   },
   "devDependencies": {
-    "monje": "0.0.5",
-    "express": "latest",
     "vows": "latest"
   },
   "keywords": [
     "jstp",
-    "websocket",
     "json",
     "distributed"
   ],
