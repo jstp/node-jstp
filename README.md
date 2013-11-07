@@ -1,46 +1,82 @@
-JSTP for node
-=============
+JSTP for Node.js
+================
 
-[JSTP](https://github.com/southlogics/jstp-rfc) implementation in Node.js.
+[JSTP/0.6 Engine 1.0](https://github.com/jstp/jstp-engine) reference implementation in Node.js.
 
 Installation
 ------------
 
     npm install jstp
 
-Usage
------
+API
+---
 
-### Local event firing
+> The full API (external and internal) is thoroughly described in the [Vows.js specs](http://vowsjs.org/) in the `spec/jstp` folder. 
+> To run the specs, install Vows.js globally with the `npm -g install vows` command (may require `sudo`), clone this repository, run `npm install` on the base directory of your clone and then run `vows spec/jstp/* --spec`
 
-```javascript
-var jstp = require('jstp');
+This implementation of a `JSTPEngine` is the reference implementation of the JSTP/0.6 Engine 1.0 recommendation. The API is divided in two parts: the external API, which is all part of the recommendation and is to be consumed by client libraries and applications, and the internal API, which comprehends the classes that manage the inner workings of the Engine, and while they are useful as reference they are neither mandatory nor part of the recommendation.
 
-var lib = {
-  action: function (dispatch) {
-    console.log(dispatch.body);
-  }
-}
+External API (Recommendation)
+-----------------------------
 
-jstp.bind({
-  endpoint: {
-    method: "GET",
-    resource: ["Lib"]
-  }
-}, lib.action, lib);
+#### `JSTPEngine`
 
-setTimeout( function () {
-  jstp.get({
-    resource: ["Lib"],
-    body: "This works!";
-  })
-}, 2000);
-```
+- `#dispatch( JSTPDispatch dispatch [, JSTPCallable callback [, Object context ] ] )`
+
+#### `JSTPDispatch`
+
+- `#getProtocol() : Array<String>`
+- `#setProtocol( Array<String> protocol ) : JSTPDispatch`
+- `#getMethod() : String`
+- `#setMethod( String method ) : JSTPDispatch`
+- `#getResource() : Array`
+- `#setResource( Array ) : JSTPDispatch`
+- `#getTimestamp() : Long`
+- `#setTimestamp( Long timestamp ) : JSTPDispatch`
+- `#getToken() : Array<String>`
+- `#setToken( Array<String> ) : JSTPDispatch`
+- `#getTo() : Array<String>`
+- `#setTo( Array<String> ) : JSTPDispatch`
+- `#getBody() : Object`
+- `#setBody( Object body ) : JSTPDispatch`
+- `#getEndpoint() : JSTPEndpoint`
+- `#setEndpoint( JSTPEndpoint ) : JSTPDispatch`
+- `#getFrom() : Array<String>`
+- `#setFrom( JSTPEndpoint endpoint ) : JSTPDispatch`
+- `#validate() : Boolean`
+- `isOfAnswerMorphology() : Boolean`
+- `isOfSubscriptionMorphology() : Boolean`
+- `isOfDispatchMorphology() : Boolean`
+
+#### `JSTPCallable`
+
+- `#call( JSTPTriggeringPackage triggeringPackage )`
+
+#### 'JSTPEndpoint'
+
+- `#getMethodPattern() : String`
+- `#setMethodPattern( String method ) : JSTPEndpoint`
+- `#getResourcePattern() : Array`
+- `#setResourcePattern( Array ) : JSTPEndpoint`
+- `#getToPattern() : Array<String>`
+- `#setToPattern( Array<String> ) : JSTPEndpoint`
+
+#### `JSTPTriggeringPackage`
+
+- `JSTPTriggeringPackage( JSTPEngine engine, String currentEmitter ) : JSTPTriggeringPackage`
+- `#getEngine() : JSTPEngine`
+- `#getCurrentEmitter() : String`
+- `#getDispatch() : JSTPDispatch`
+- `#setDispatch( JSTPDispatch dispatch ) : JSTPTriggeringPackage`
+- `#getAnswer() : JSTPDispatch`
+- `#setAnswer( JSTPDispatch answer ) : JSTPTriggeringPackage`
+- `#anwer( Integer statusCode [, Object body [, JSTPCallable callback [, Object context ] ] ] ) : JSTPTriggeringPackage`
+- `#dispatch( JSTPDispatch dispatch [, JSTPCallable callback [, Object context ] ] ) : JSTPTriggeringPackage`
 
 License
 -------
 
-Copyright © 2013 SouthLogics
+Copyright © 2013 Fernando Vía Canel, Luciano Bertenasco and SouthLogics
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
