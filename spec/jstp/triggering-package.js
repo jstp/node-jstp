@@ -538,6 +538,14 @@ vows.describe('JSTPTriggeringPackage').addBatch({
     }
   },
 
+  '#getParams()': {
+    'should return the params': 'pending'
+  },
+
+  '#setParams( Hash params )': {
+    'should set the params': 'pending'
+  },
+
   '#dispatch': {
 
     'no arguments': {
