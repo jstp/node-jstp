@@ -307,5 +307,205 @@ vows.describe('JSTPEndpoint').addBatch({
         assert.isFalse(endpointB.equivalent(endpointA));                
       }
     }
+  },
+
+  '#matchMethodPattern( JSTPDispatch )': {
+    'Method Pattern is definite': {
+      'the Method Header is equal to the pattern': {
+        'should return true': 'pending'
+      },
+
+      'the Method Header is different from the Pattern': {
+        'should return false': 'pending'
+      }
+    },
+
+    'Method Pattern is a wildcard': {
+      'should return true': 'pending'
+    }
+  },
+
+  '#matchResourcePattern( JSTPDispatch )': {
+
+    topic: new jstp.JSTPDispatch().setMethod("GET"),
+
+    'pattern ["user"]': {
+
+      'resource ["user"]': {
+        'should return true': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["user"]);
+          dispatch.setResource(["user"]);
+          assert.isTrue(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },
+
+      'resource ["notUser"]': {
+        'should return false': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["user"]);
+          dispatch.setResource(["notUser"]);
+          assert.isFalse(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },
+    },
+
+    'pattern ["user", 10]': {
+      'resource ["user", 10]': {
+        'should return true': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["user", 10]);
+          dispatch.setResource(["user", 10]);
+          assert.isTrue(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },
+
+      'resource ["user", 12]': {
+        'should return false': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["user", 10]);
+          dispatch.setResource(["user", 12]);
+          assert.isFalse(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },
+
+      'resource ["user", 10, null]': {
+        'should return false': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["user", 10]);
+          dispatch.setResource(["user", 10, null]);
+          assert.isFalse(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      }, 
+
+      'resource ["user", 10, "notNull"]': {
+        'should return false': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["user", 10]);
+          dispatch.setResource(["user", 10, "notNull"]);
+          assert.isFalse(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },      
+    },
+
+    'pattern ["*"]': {
+      'resource ["*"]': {
+        'should return true': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["*"]);
+          dispatch.setResource(["*"]);
+          assert.isTrue(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        },
+      },
+
+      'resource ["user"]': {
+        'should return true': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["*"]);
+          dispatch.setResource(["user"]);
+          assert.isTrue(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        },
+      },
+    },
+
+    'pattern ["*", "lala"]': {
+      'resource ["user", "lala"]': {
+        'should return true': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["*", "lala"]);
+          dispatch.setResource(["user", "lala"]);
+          assert.isTrue(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },
+      
+      'resource ["user", "notLala"]': {
+        'should return false': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint().setResourcePattern(["*", "lala"]);
+          dispatch.setResource(["user", "notLala"]);
+          assert.isFalse(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },
+    },
+
+    'pattern ["*", "*", "*", "*"]': { 
+      'BIND dispatch resource pattern ["!%&#$", null, 235]': {
+        topic: new jstp.JSTPDispatch().setMethod("BIND"),
+
+        'should return false': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint()
+            .setResourcePattern(["*", "*", "*", "*"]);
+          dispatch.setEndpoint(
+            new jstp.JSTPEndpoint()
+              .setMethodPattern("*")
+              .setResourcePattern(["!%&#$", null, 235])
+          );
+          assert.isFalse(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      },
+
+      'BIND dispatch resource pattern ["!%&#$", null, 235, true]': {
+        topic: new jstp.JSTPDispatch().setMethod("BIND"),
+
+        'should return false': function (dispatch) {
+          var endpoint = new jstp.JSTPEndpoint()
+            .setResourcePattern(["*", "*", "*", "*"]);
+          dispatch.setEndpoint(
+            new jstp.JSTPEndpoint()
+              .setMethodPattern("*")
+              .setResourcePattern(["!%&#$", null, 235, true])
+          );
+          assert.isTrue(
+            endpoint.matchResourcePattern(dispatch)
+          );
+        }
+      }      
+    },
+
+    'pattern ["..."]': {
+      topic: function () {
+        return {
+          endpoint: new jstp.JSTPEndpoint().setResourcePattern(["..."]),
+          dispatch: new jstp.JSTPDispatch().setMethod("PUT")
+        };
+      },
+
+      'resource ["user"]': {
+        'should return true': function (pair) {
+          pair.dispatch.setResource(["user"]);
+          assert.isTrue(
+            pair.endpoint.matchResourcePattern(pair.dispatch));
+        }
+      },
+
+      'resource ["user", "intelligence"]': {
+        'should return true': function (pair) {
+          pair.dispatch.setResource(["user", "intelligence"]);
+          assert.isTrue(
+            pair.endpoint.matchResourcePattern(pair.dispatch));
+        }
+      },
+
+      'resource ["user", "intelligence", "is"]': {
+        'should return true': function (pair) {
+          pair.dispatch.setResource(["user", "intelligence", "is"]);
+          assert.isTrue(
+            pair.endpoint.matchResourcePattern(pair.dispatch));
+        }
+      }
+    }
+
   }
 }).export(module); 
