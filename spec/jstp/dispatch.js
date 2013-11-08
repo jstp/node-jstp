@@ -552,6 +552,13 @@ vows.describe('JSTPDispatch').addBatch({
               }
             },
 
+            'it is a 101 No More Answers and has no Triggering ID': {
+              'should return true': function (dispatch) {
+                dispatch.setResource([101, "somethid"]);
+                assert.isTrue(dispatch.validate());
+              }
+            },
+
             'the Resource is correct': {
               'the To Header is not empty': {
                 'should throw a JSTPInvalidToInAnswer': function (dispatch) {

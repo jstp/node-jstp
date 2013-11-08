@@ -227,14 +227,50 @@ vows.describe('JSTPTransactionManager').addBatch({
 
   '#stop( String transactionID )': {
     'should remove the transactionID key from the list': function () {
-      var transactionManager = new jstp.JSTPTransactionManager({});
+      var transactionManager = new jstp.JSTPTransactionManager({ dispatch: function () {} });
       transactionManager.list["here"] = ["Triggering"];
       transactionManager.stop("here");
       assert.isUndefined(transactionManager.list["here"]);       
     },
 
-    'should send the 100 Last Answer answer to the JSTPEngine (first in RFC)': 'pending',
+    'should send the 101 No More Answers answer to the JSTPEngine': function () {
+      var mockEngine = {
+        dispatch: function (dispatch) {
+          this.dispatchWasCalled = this.dispatchWasCalled ? this.dispatchWasCalled + 1 : 1;
+          if (this.dispatchWasCalled == 1) {
+            assert.equal(dispatch.getResource()[0], 101);
+            assert.equal(dispatch.getResource()[1], "here");
+          }
+        }
+      };
+      var transactionManager = new jstp.JSTPTransactionManager(mockEngine);
+      transactionManager.list["here"] = ["triggers"];
+      transactionManager.stop("here");
 
-    'should send the RELEASE ANSWER for the Transaction ID to the JSTPEngine': 'pending'
+      assert.isUndefined(transactionManager.list["here"]);
+      assert.isTrue(mockEngine.dispatchWasCalled > 1);
+    },
+
+    'should send the RELEASE ANSWER for the Transaction ID to the JSTPEngine': function () {
+      var mockEngine = {
+        dispatch: function (dispatch) {
+          this.dispatchWasCalled = this.dispatchWasCalled ? this.dispatchWasCalled + 1 : 1;
+          if (this.dispatchWasCalled == 2) {
+            assert.equal(dispatch.getMethod(), "RELEASE");
+            var endpoint = dispatch.getEndpoint();
+            var resourcePattern = endpoint.getResourcePattern();
+            assert.equal(resourcePattern[0], "*");
+            assert.equal(resourcePattern[1], "here");
+            assert.equal(resourcePattern[2], "*");
+            assert.equal(endpoint.getMethodPattern(), "ANSWER");
+          }
+        }
+      }
+
+      var transactionManager = new jstp.JSTPTransactionManager(mockEngine);
+      transactionManager.list["here"] = ["add"];
+      transactionManager.stop("here");
+      assert.equal(mockEngine.dispatchWasCalled, 2);
+    }
   }
 }).export(module);     
