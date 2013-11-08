@@ -109,6 +109,8 @@ vows.describe('JSTPSubscriptionManager').addBatch({
   '#trigger( JSTPDispatch )': {
     'if it matches no endpoint': 'pending',
 
-    'if it matches an endpoint': 'pending'
+    'if it matches an endpoint': {
+      'should call the callback with the triggering package containing the dispatch, engine and params': 'pending'
+    }
   }
 }).export(module);     
