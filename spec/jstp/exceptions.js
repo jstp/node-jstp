@@ -205,3 +205,9 @@ vows.describe('JSTPMissingTransactionID').addBatch({
     assert.isFunction(jstp.JSTPMissingTransactionID);
   }
 }).export(module); 
+
+vows.describe('JSTPEndpointAlreadyBound').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPEndpointAlreadyBound);
+  }
+}).export(module); 
