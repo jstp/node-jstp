@@ -231,5 +231,81 @@ vows.describe('JSTPEndpoint').addBatch({
         }, jstp.JSTPMissingResourcePatternInEndpoint);
       } 
     }
+  },
+
+  '#equivalent()': {
+    'if both have a methodPattern with equal value': {
+      'should return true': function () {
+        var endpointA = new jstp.JSTPEndpoint().setMethodPattern("HEY");
+        var endpointB = new jstp.JSTPEndpoint().setMethodPattern("HEY");
+        assert.isTrue(endpointA.equivalent(endpointB));
+      }
+    },
+
+    'if the methodPattern is different': {
+      'should return false': function () {
+        var endpointA = new jstp.JSTPEndpoint().setMethodPattern("HEYA");
+        var endpointB = new jstp.JSTPEndpoint().setMethodPattern("HEY");
+        assert.isFalse(endpointB.equivalent(endpointA));
+      }
+    },
+
+    'if both have a resourcePattern with equal contents': {
+      'and a methodPattern with equal contents': {
+        'should return true': function () {
+          var endpointA = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+            .setResourcePattern([123, null, "hey"]);
+          var endpointB = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+            .setResourcePattern([123, null, "hey"]);
+          assert.isTrue(endpointB.equivalent(endpointA));
+        }
+      },
+
+      'and a methodPattern with different contents': {
+        'should return false': function () {
+          var endpointA = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+            .setResourcePattern([123, null, "hey"]);
+          var endpointB = new jstp.JSTPEndpoint().setMethodPattern("HEYU")
+            .setResourcePattern([123, null, "hey"]);
+          assert.isFalse(endpointB.equivalent(endpointA));
+        }
+      }
+    },
+
+    'if the resourcePatterns are different': {
+      'is should return false': function () {
+        var endpointA = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+          .setResourcePattern([123, null, "hey"]);
+        var endpointB = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+          .setResourcePattern([123, null, "hola"]);
+        assert.isFalse(endpointB.equivalent(endpointA));        
+      }
+    },
+
+    'if the toPatterns are different': {
+      'should return false': function () {
+        var endpointA = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+          .setResourcePattern([123, null, "hey"])
+          .setToPattern(["here", "there"]);
+        var endpointB = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+          .setResourcePattern([123, null, "hey"])
+          .setToPattern(["here", "far"]);
+        assert.isFalse(endpointB.equivalent(endpointA));                
+      }
+    },
+
+    'if the fromPatterns are different': {
+      'should return false': function () {
+        var endpointA = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+          .setResourcePattern([123, null, "hey"])
+          .setToPattern(["here", "there"])
+          .setFromPattern(["sas"]);
+        var endpointB = new jstp.JSTPEndpoint().setMethodPattern("HEY")
+          .setResourcePattern([123, null, "hey"])
+          .setToPattern(["here", "there"])
+          .setFromPattern(["312", "123"]);
+        assert.isFalse(endpointB.equivalent(endpointA));                
+      }
+    }
   }
 }).export(module); 
