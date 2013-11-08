@@ -211,3 +211,9 @@ vows.describe('JSTPEndpointAlreadyBound').addBatch({
     assert.isFunction(jstp.JSTPEndpointAlreadyBound);
   }
 }).export(module); 
+
+vows.describe('JSTPUnboundEndpoint').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPUnboundEndpoint);
+  }
+}).export(module); 
