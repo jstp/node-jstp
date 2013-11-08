@@ -199,3 +199,9 @@ vows.describe('JSTPNotAnEndpoint').addBatch({
     assert.isFunction(jstp.JSTPNotAnEndpoint);
   }
 }).export(module); 
+
+vows.describe('JSTPMissingTransactionID').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPMissingTransactionID);
+  }
+}).export(module); 
