@@ -193,3 +193,9 @@ vows.describe('JSTPInvalidToPatternType').addBatch({
     assert.isFunction(jstp.JSTPInvalidToPatternType);
   }
 }).export(module); 
+
+vows.describe('JSTPNotAnEndpoint').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPNotAnEndpoint);
+  }
+}).export(module); 
