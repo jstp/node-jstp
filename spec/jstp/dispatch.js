@@ -1190,5 +1190,29 @@ vows.describe('JSTPDispatch').addBatch({
         assert.isFalse(dispatch.isOfSubscriptionMorphology());
       }      
     }
+  },
+
+  '#exportToJSON()': {
+    'should validate beforehand': 'pending',
+
+    'should return the JSON serialization of the properties': 'pending'
+  },
+
+  '#importFromJSON( String jsonSerialization )': {
+    'legal JSON serialization': {
+      'valid Dispatch represented': {
+        'should set the properties': 'pending',
+
+        'should validate': 'pending'
+      },
+
+      'invalid data structure format (array)': {
+        'should throw a JSTPInvalidArrayInSerialization': 'pending'
+      }
+    },
+
+    'illegal JSON serialization': {
+      'should throw a JSTPJSONSyntaxError': 'pending'
+    }
   }
 }).export(module); 
