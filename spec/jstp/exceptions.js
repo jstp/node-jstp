@@ -217,3 +217,9 @@ vows.describe('JSTPUnboundEndpoint').addBatch({
     assert.isFunction(jstp.JSTPUnboundEndpoint);
   }
 }).export(module); 
+
+vows.describe('JSTPInvalidSyntaxForPattern').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPInvalidSyntaxForPattern);
+  }
+}).export(module); 
