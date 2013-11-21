@@ -23,6 +23,9 @@
     "json",
     "distributed"
   ],
+  "scripts": {
+    "test": "vows spec/jstp/* --spec"
+  },
   "repository": "git://github.com/southlogics/node-jstp",
   "main": "index",
   "engines": {
