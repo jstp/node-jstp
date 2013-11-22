@@ -73,6 +73,15 @@ External API (Recommendation)
 - `#anwer( Integer statusCode [, Object body [, JSTPCallable callback [, Object context ] ] ] ) : JSTPTriggeringPackage`
 - `#dispatch( JSTPDispatch dispatch [, JSTPCallable callback [, Object context ] ] ) : JSTPTriggeringPackage`
 
+Internal API
+------------
+
+In this section I will share comments about the architecture of the internal API.
+
+### Separation of concerns
+
+- Only `JSTPEngine` and `JSTPTransactionManager` can generate and send to process new Dispatches. In case that any other object finds a condition which may cause an Answer Dispatch to be sent, it should limit itself to throw an exception named after the format `JSTP<StatusCodeDescription>` such as `JSTPNotFound` for `404` Not Found Answers. The right party will contextually choose either to generate and process a new Answer Dispatch or to just propagate the exception.
+
 License
 -------
 
