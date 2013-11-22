@@ -386,20 +386,130 @@ vows.describe('JSTPEndpoint').addBatch({
   },
 
   '#matchFromPattern( JSTPDispatch )': {
-    'should send the from pattern of the endpoint and the from pattern of the matchable endpoint to the JSTPPatternComparer compare and specify not to use Named Element Pattern': 'pending',
+    'should send the from pattern of the endpoint and the from pattern of the matchable endpoint to the JSTPPatternComparer compare and specify not to use Named Element Pattern': function () {
+      var endpointFromPattern = ["*"];
+      var dispatchFromPattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setFromPattern(endpointFromPattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(["blabla"])
+            .setFrom(dispatchFromPattern);
 
-    'should propagate JSTPPatternComparer compare return value': 'pending',
+      jstp.JSTPPatternComparer.compare = function (pattern, value, matches, notUseNamedElementWildcard) {
+        this.compareWasCalled = true;
+        assert.equal(pattern, endpointFromPattern);
+        assert.equal(value, dispatchFromPattern);
+        assert.isNull(matches);
+        assert.isTrue(notUseNamedElementWildcard);
+      }
 
-    'should propagate exceptions thrown by JSTPPatternComparer compare': 'pending'
-    
+      endpoint.matchFromPattern( dispatch );
+
+      assert.isTrue(jstp.JSTPPatternComparer.compareWasCalled);      
+    },
+
+    'should propagate JSTPPatternComparer compare return value': function () {
+      var endpointFromPattern = ["*"];
+      var dispatchFromPattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setFromPattern(endpointFromPattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(["blabla"])
+            .setFrom(dispatchFromPattern);
+
+      var returnable = {};
+
+      jstp.JSTPPatternComparer.compare = function (pattern, value) {
+        return returnable;
+      }
+
+      assert.equal(endpoint.matchFromPattern( dispatch ), returnable);
+    },
+
+    'should propagate exceptions thrown by JSTPPatternComparer compare': function () {
+      var endpointFromPattern = ["*"];
+      var dispatchFromPattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setFromPattern(endpointFromPattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(["blabla"])
+            .setFrom(dispatchFromPattern);
+
+      jstp.JSTPPatternComparer.compare = function (pattern, value) {
+        throw new Error;
+      }      
+
+      assert.throws( function () {
+        endpoint.matchFromPattern( dispatch );
+      }, Error);
+    }
+
   },
 
   '#matchToPattern( JSTPDispatch )': {
-    'should send the to pattern of the endpoint and the to pattern of the matchable endpoint to the JSTPPatternComparer compare and specify not to use Named Element Pattern': 'pending',
+    'should send the to pattern of the endpoint and the to pattern of the matchable endpoint to the JSTPPatternComparer compare and specify not to use Named Element Pattern': function () {
+      var endpointToPattern = ["*"];
+      var dispatchToPattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setToPattern(endpointToPattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(["blabla"])
+            .setTo(dispatchToPattern);
 
-    'should propagate JSTPPatternComparer compare return value': 'pending',
+      jstp.JSTPPatternComparer.compare = function (pattern, value, matches, notUseNamedElementWildcard) {
+        this.compareWasCalled = true;
+        assert.equal(pattern, endpointToPattern);
+        assert.equal(value, dispatchToPattern);
+        assert.isNull(matches);
+        assert.isTrue(notUseNamedElementWildcard);
+      }
 
-    'should propagate exceptions thrown by JSTPPatternComparer compare': 'pending'
+      endpoint.matchToPattern( dispatch );
+
+      assert.isTrue(jstp.JSTPPatternComparer.compareWasCalled);         
+    },
+
+    'should propagate JSTPPatternComparer compare return value': function () {
+      var endpointToPattern = ["*"];
+      var dispatchToPattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setToPattern(endpointToPattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(["blabla"])
+            .setTo(dispatchToPattern);
+
+      var returnable = {};
+
+      jstp.JSTPPatternComparer.compare = function (pattern, value) {
+        return returnable;
+      }
+
+      assert.equal(endpoint.matchToPattern( dispatch ), returnable);
+    },
+
+    'should propagate exceptions thrown by JSTPPatternComparer compare': function () {
+      var endpointToPattern = ["*"];
+      var dispatchToPattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setToPattern(endpointToPattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(["blabla"])
+            .setTo(dispatchToPattern);
+
+      jstp.JSTPPatternComparer.compare = function (pattern, value) {
+        throw new Error;
+      }      
+
+      assert.throws( function () {
+        endpoint.matchToPattern( dispatch );
+      }, Error);
+    }
 
   }
 }).export(module); 
