@@ -4,7 +4,7 @@ var vows    = require('vows')
 
 vows.describe('JSTPPatternComparer').addBatch({
 
-  '.compare( pattern, value )': {
+  '.compare( pattern, value [, matches [, notUseNamedElementPattern ] ])': {
 
     'pattern: null | value: null | Error': function () {
       assert.throws( function () { jstp.JSTPPatternComparer.compare(null, null); } );
@@ -431,6 +431,34 @@ vows.describe('JSTPPatternComparer').addBatch({
       assert.throws(function () {
         jstp.JSTPPatternComparer.compare(["...", ":named"], ["stuff"]);
       }, jstp.JSTPInvalidSyntaxForPattern);
+    },
+
+    'not use named element wildcard': {    
+      'pattern: [":named"] | value: ["stuff"] | False': function () {
+        assert.isFalse(jstp.JSTPPatternComparer.compare([":named"], ["stuff"], null, true));
+      },
+
+      'pattern: [":named", null] | value: ["staff", null] | False': function () {
+        assert.isFalse(jstp.JSTPPatternComparer.compare([":named", null], ["staff", null], null, true));
+      },
+
+      'pattern: [":named"] | value: ["staff", null] | False': function () {
+        assert.isFalse(jstp.JSTPPatternComparer.compare([":named"], ["staff", null], null, true));
+      },
+
+      'pattern: [":special", "...", null, ":value"] | value: [":special", "moar", null, ":value"] | True': function () {
+        var result = jstp.JSTPPatternComparer.compare(
+          [":special", "...", null, ":value"],
+          [":special", "moar", null, ":value"],
+          null, true
+        );
+    
+        assert.isTrue(result);
+      },
+
+      'pattern: ["...", ":named"] | value: ["stuff"] | False': function () {
+        assert.isFalse(jstp.JSTPPatternComparer.compare(["...", ":named"], ["stuff"], null, true));
+      }
     }
 
   }
