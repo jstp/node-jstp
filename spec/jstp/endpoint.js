@@ -312,16 +312,37 @@ vows.describe('JSTPEndpoint').addBatch({
   '#matchMethodPattern( JSTPDispatch )': {
     'Method Pattern is definite': {
       'the Method Header is equal to the pattern': {
-        'should return true': 'pending'
+        'should return true': function () {
+          var endpoint = new jstp.JSTPEndpoint()
+                .setMethodPattern("GET");
+          var dispatch = new jstp.JSTPDispatch()
+                .setMethod("GET")
+                .setResource(["asdfa", "as"]);
+          assert.isTrue(endpoint.matchMethodPattern(dispatch));
+        }
       },
 
       'the Method Header is different from the Pattern': {
-        'should return false': 'pending'
+        'should return false': function () {
+          var endpoint = new jstp.JSTPEndpoint()
+                .setMethodPattern("GET");
+          var dispatch = new jstp.JSTPDispatch()
+                .setMethod("PUT")
+                .setResource(["asfdas"]);
+          assert.isFalse(endpoint.matchMethodPattern(dispatch));
+        }
       }
     },
 
     'Method Pattern is a wildcard': {
-      'should return true': 'pending'
+      'should return true': function () {
+        var endpoint = new jstp.JSTPEndpoint()
+              .setMethodPattern("*");
+        var dispatch = new jstp.JSTPDispatch()
+              .setMethod("GET")
+              .setResource(["asdfa", "as"]);
+        assert.isTrue(endpoint.matchMethodPattern(dispatch));
+      }
     }
   },
 
