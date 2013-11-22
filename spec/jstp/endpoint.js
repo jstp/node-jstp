@@ -347,14 +347,46 @@ vows.describe('JSTPEndpoint').addBatch({
       assert.isTrue(jstp.JSTPPatternComparer.compareWasCalled);
     },
 
-    'should propagate JSTPPatternComparer compare return value': 'pending',
+    'should propagate JSTPPatternComparer compare return value': function () {
+      var endpointResourcePattern = ["*"];
+      var dispatchResourcePattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setResourcePattern(endpointResourcePattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(dispatchResourcePattern);
 
-    'should propagate exceptions thrown by JSTPPatternComparer compare': 'pending'
+      var returnable = {};
+
+      jstp.JSTPPatternComparer.compare = function (pattern, value) {
+        return returnable;
+      }
+
+      assert.equal(endpoint.matchResourcePattern( dispatch ), returnable);
+    },
+
+    'should propagate exceptions thrown by JSTPPatternComparer compare': function () {
+      var endpointResourcePattern = ["*"];
+      var dispatchResourcePattern = ["lala"];
+      var endpoint = new jstp.JSTPEndpoint()
+            .setResourcePattern(endpointResourcePattern);
+      var dispatch = new jstp.JSTPDispatch()
+            .setMethod("GET")
+            .setResource(dispatchResourcePattern);
+
+      jstp.JSTPPatternComparer.compare = function (pattern, value) {
+        throw new Error;
+      }      
+
+      assert.throws( function () {
+        endpoint.matchResourcePattern( dispatch );
+      }, Error);
+    }
 
   },
 
   '#matchFromPattern( JSTPDispatch )': {
-    'should send the from pattern of the endpoint and the from pattern of the matchable endpoint to the JSTPPatternComparer compare': 'pending',
+    'should send the from pattern of the endpoint and the from pattern of the matchable endpoint to the JSTPPatternComparer compare and specify not to use Named Element Pattern': 'pending',
 
     'should propagate JSTPPatternComparer compare return value': 'pending',
 
@@ -363,7 +395,7 @@ vows.describe('JSTPEndpoint').addBatch({
   },
 
   '#matchToPattern( JSTPDispatch )': {
-    'should send the to pattern of the endpoint and the to pattern of the matchable endpoint to the JSTPPatternComparer compare': 'pending',
+    'should send the to pattern of the endpoint and the to pattern of the matchable endpoint to the JSTPPatternComparer compare and specify not to use Named Element Pattern': 'pending',
 
     'should propagate JSTPPatternComparer compare return value': 'pending',
 
