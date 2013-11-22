@@ -223,3 +223,9 @@ vows.describe('JSTPInvalidSyntaxForPattern').addBatch({
     assert.isFunction(jstp.JSTPInvalidSyntaxForPattern);
   }
 }).export(module); 
+
+vows.describe('JSTPNotFound').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPNotFound);
+  }
+}).export(module); 
