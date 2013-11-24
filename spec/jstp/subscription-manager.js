@@ -119,11 +119,30 @@ vows.describe('JSTPSubscriptionManager').addBatch({
 
     'there are endpoints subscribed': {
       'if it matches no endpoint': {
-        'should throw a JSTPNotFound': 'pending'
+        'should throw a JSTPNotFound': function () {
+          var subscriptionManager = new jstp.JSTPSubscriptionManager({});
+          subscriptionManager.
+          var dispatch = new jstp.JSTPDispatch().setMethod("GET").setResource(["pizza"]);
+          assert.throws(function () {
+            subscriptionManager.trigger(dispatch);
+          }, jstp.JSTPNotFound);
+        }
       },
 
       'if it matches an endpoint': {
-        'should call the callback with the triggering package containing the dispatch, engine and params': 'pending'
+        'if it has a transactionID': {
+          'should get a clone of the dispatch with a triggering ID set': 'pending'
+        },
+
+        'if there is a context': {
+          'should call the callback with the triggering package containing the dispatch, engine and params and the context': 'pending'
+        },
+
+        'if there is no context': {
+          'should call the callback with the triggering package containing the dispatch, engine and params': 'pending'
+        }
+
+        }
       }
     }
   }
