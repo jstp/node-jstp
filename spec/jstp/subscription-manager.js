@@ -121,8 +121,16 @@ vows.describe('JSTPSubscriptionManager').addBatch({
       'if it matches no endpoint': {
         'should throw a JSTPNotFound': function () {
           var subscriptionManager = new jstp.JSTPSubscriptionManager({});
-          subscriptionManager.
-          var dispatch = new jstp.JSTPDispatch().setMethod("GET").setResource(["pizza"]);
+          subscriptionManager.bind(
+            helper.validEndpoint, 
+            "transactionID", 
+            helper.callback, 
+            helper.context
+          );
+          var dispatch = new jstp.JSTPDispatch()
+              .setMethod("GET")
+              .setResource(["several", "pizzas"]);
+
           assert.throws(function () {
             subscriptionManager.trigger(dispatch);
           }, jstp.JSTPNotFound);
@@ -131,7 +139,22 @@ vows.describe('JSTPSubscriptionManager').addBatch({
 
       'if it matches an endpoint': {
         'if it has a transactionID': {
-          'should get a clone of the dispatch with a triggering ID set': 'pending'
+          'should get a clone of the dispatch with a triggering ID set': function () {
+            var subscriptionManager = new jstp.JSTPSubscriptionManager({});
+/*            var emitter = {
+              endpoint: new jstp.JSTPEndpoint()
+                          .setMethodPattern("GET")
+                          .setResourcePattern(["*"]),
+              callback: function (triggeringPackage) {
+                this.callbackWasCalled = true;
+                assert.instanceOf(triggeringPackage, jstp.JSTPTriggeringPackage);
+                assert.equal(this, emitter);
+                // 
+                assert.equal(triggeringPackage.dispatch)
+              }
+            }
+            subscriptionManager.bind() */
+          }
         },
 
         'if there is a context': {
@@ -140,8 +163,6 @@ vows.describe('JSTPSubscriptionManager').addBatch({
 
         'if there is no context': {
           'should call the callback with the triggering package containing the dispatch, engine and params': 'pending'
-        }
-
         }
       }
     }
