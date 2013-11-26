@@ -22,6 +22,10 @@ vows.describe('JSTPPatternComparer').addBatch({
       assert.isTrue( jstp.JSTPPatternComparer.compare([null], [null]) );    
     },
 
+    'pattern: [] | value: [] | True': function () {
+      assert.isTrue( jstp.JSTPPatternComparer.compare([], []) );    
+    },
+
     'pattern: ["null"] | value: [null] | False': function () {
       assert.isFalse( jstp.JSTPPatternComparer.compare(["null"], [null]) );    
     },
