@@ -531,6 +531,39 @@ vows.describe('JSTPEndpoint').addBatch({
         endpoint.matchToPattern( dispatch );
       }, Error);
     }
+  },
 
+  '#match( JSTPDispatch )': {
+    'should return the boolean AND of all the matches methods with the dispatch': function () {
+      var endpoint = new jstp.JSTPEndpoint();
+      var theDispatch = new jstp.JSTPDispatch();
+      endpoint.matchResourcePattern = function (dispatch) {
+        this.matchResourcePatternWasCalled = true;
+        assert.equal(dispatch, theDispatch);
+        return true;
+      }
+      endpoint.matchToPattern = function (dispatch) {
+        this.matchToPatternWasCalled = true;
+        assert.equal(dispatch, theDispatch);
+        return true;
+      }
+      endpoint.matchMethodPattern = function (dispatch) {
+        this.matchMethodPatternWasCalled = true;
+        assert.equal(dispatch, theDispatch);
+        return true;
+      }
+      endpoint.matchFromPattern = function (dispatch) {
+        this.matchFromPatternWasCalled = true;
+        assert.equal(dispatch, theDispatch);
+        return true;
+      }
+
+      assert.isTrue(endpoint.match(theDispatch));
+
+      assert.isTrue(endpoint.matchFromPatternWasCalled);
+      assert.isTrue(endpoint.matchToPatternWasCalled);
+      assert.isTrue(endpoint.matchResourcePatternWasCalled);
+      assert.isTrue(endpoint.matchMethodPatternWasCalled);
+    }
   }
 }).export(module); 
