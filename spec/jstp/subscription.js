@@ -13,20 +13,83 @@ vows.describe('JSTPSubscription').addBatch({
   },
   '#setCallback( JSTPCallable )': {
   	'has #call method': {
-    	'should set the callback': 'pending'
+    	'should set the callback': function () {
+        var subscription = new jstp.JSTPSubscription();
+        var callback = function () {};
+        subscription.setCallback(callback);
+        assert.equal(subscription.getCallback(), callback);        
+      }
     },
 
     'misses #call method': {
-      'should throw an error': 'pending'
+      'should throw an error': function () {
+        assert.throws(function () {
+          new jstp.JSTPSubscription().setCallback({});
+        }, Error);
+      }
     }
   },
 
-  '#getContext()': 'pending',
-  '#setContext( Object )': 'pending',
+  '#getContext()': {
+    'should return the context': function () {
+      var subscription = new jstp.JSTPSubscription();
+      var context = {};
+      subscription.setContext(context);
+      assert.equal(subscription.getContext(), context);
+    }
+  },
+  '#setContext( Object )': {
+    'should set the context': function () {
+      var subscription = new jstp.JSTPSubscription();
+      var context = {};
+      subscription.setContext(context);
+      assert.equal(subscription.getContext(), context);
+    }
+  },
   
-  '#getEndpoint()': 'pending',
-  '#setEndpoint( JSTPEndpoint )': 'pending',
+  '#getEndpoint()': {
+    'should return the endpoint': function () {
+      var subscription = new jstp.JSTPSubscription();
+      var endpoint = new jstp.JSTPEndpoint();
+      subscription.setEndpoint(endpoint);
+      assert.equal(subscription.getEndpoint(), endpoint);
+    }
+  },
 
-  '#getTransactionID()': 'pending',
-  '#setTransactionID( String )': 'pending'
+  '#setEndpoint( JSTPEndpoint )': {
+    'is JSTPEndpoint': {
+      'should set the endpoint': function () {
+        var subscription = new jstp.JSTPSubscription();
+        var endpoint = new jstp.JSTPEndpoint();
+        subscription.setEndpoint(endpoint);
+        assert.equal(subscription.getEndpoint(), endpoint);        
+      }      
+    },
+
+    'is not JSTPEndpoint': {
+      'should throw an Error': function () {
+        assert.throws(function () {
+          new jstp.JSTPSubscription().setEndpoint({});
+        }, Error); 
+      } 
+    }
+  },
+
+  '#getTransactionID()': {
+    'should get the transactionID': function () {
+      var subscription = new jstp.JSTPSubscription();
+      var transactionID = "transactionID";
+      subscription.setTransactionID(transactionID);
+      assert.equal(subscription.getTransactionID(), transactionID);
+    }
+  },
+  
+  '#setTransactionID( String )': {
+    'should set the transactionID': function () {
+      var subscription = new jstp.JSTPSubscription();
+      var transactionID = "transactionID";
+      subscription.setTransactionID(transactionID);
+      assert.equal(subscription.getTransactionID(), transactionID);
+    }
+  }
 }).export(module); 
