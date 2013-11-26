@@ -91,5 +91,109 @@ vows.describe('JSTPSubscription').addBatch({
       subscription.setTransactionID(transactionID);
       assert.equal(subscription.getTransactionID(), transactionID);
     }
+  },
+
+  '#equivalent': {
+    'the endpoint is equivalent and the callback and context are the same': {
+      'should return true': function () {
+        var firstEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["*"]);
+        var callback = function () {};
+        var context  = {};
+        var first = new jstp.JSTPSubscription()
+            .setEndpoint(firstEndpoint)
+            .setCallback(callback)
+            .setContext(context);
+        var secondEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["*"]);    
+        var second = new jstp.JSTPSubscription()
+            .setEndpoint(secondEndpoint)
+            .setCallback(callback)
+            .setContext(context);
+
+        assert.isTrue(first.equivalent(second));
+      }
+    },
+
+    'the endpoint is not equivalent': {
+      'should return false': function () {
+        var firstEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["*"]);
+        var callback = function () {};
+        var context  = {};
+        var first = new jstp.JSTPSubscription()
+            .setEndpoint(firstEndpoint)
+            .setCallback(callback)
+            .setContext(context);
+        var secondEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["..."]);    
+        var second = new jstp.JSTPSubscription()
+            .setEndpoint(secondEndpoint)
+            .setCallback(callback)
+            .setContext(context);
+
+        assert.isFalse(first.equivalent(second));        
+      }
+    },
+
+    'the callback is not the same': {
+      'should return false': function () {
+        var firstEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["*"]);
+        var callback  = function () {};
+        var callback2 = function () {};
+        var context  = {};
+        var first = new jstp.JSTPSubscription()
+            .setEndpoint(firstEndpoint)
+            .setCallback(callback)
+            .setContext(context);
+        var secondEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["*"]);    
+        var second = new jstp.JSTPSubscription()
+            .setEndpoint(secondEndpoint)
+            .setCallback(callback2)
+            .setContext(context);
+
+        assert.isFalse(first.equivalent(second));        
+      }
+    },
+
+    'the context is not the same': {
+      'should return false': function () {
+        var firstEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["*"]);
+        var callback = function () {};
+        var context    = {};
+        var context2   = {};
+        var first = new jstp.JSTPSubscription()
+            .setEndpoint(firstEndpoint)
+            .setCallback(callback)
+            .setContext(context);
+        var secondEndpoint = new jstp.JSTPEndpoint()
+            .setMethodPattern("PUT")
+            .setFromPattern(["lala"])
+            .setResourcePattern(["*"]);    
+        var second = new jstp.JSTPSubscription()
+            .setEndpoint(secondEndpoint)
+            .setCallback(callback)
+            .setContext(context2);
+
+        assert.isFalse(first.equivalent(second));        
+      }
+    }
   }
 }).export(module); 
