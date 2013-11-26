@@ -195,5 +195,21 @@ vows.describe('JSTPSubscription').addBatch({
         assert.isFalse(first.equivalent(second));        
       }
     }
+  },
+
+  '#getEmitter()': {
+    'should get the emitter': function () {
+      var subscription = new jstp.JSTPSubscription();
+      subscription.setEmitter("monje");
+      assert.equal(subscription.getEmitter(), "monje");
+    }
+  },
+
+  '#setEmitter( String emitter )': {
+    'should set the emitter': function () {
+      var subscription = new jstp.JSTPSubscription();
+      subscription.setEmitter("monje");
+      assert.equal(subscription.getEmitter(), "monje");
+    }
   }
 }).export(module); 
