@@ -98,6 +98,13 @@ vows.describe('JSTPEndpoint').addBatch({
       var fromPattern = ["home"];
       endpoint.setFromPattern(fromPattern);
       assert.equal(endpoint.getFromPattern(), fromPattern);
+    },
+
+    'is not defined': {
+      'should return an empty array': function () {
+        var endpoint = new jstp.JSTPEndpoint();
+        assert.equal(endpoint.getFromPattern().length, 0);
+      }
     }
   },
 
@@ -112,12 +119,12 @@ vows.describe('JSTPEndpoint').addBatch({
     },
 
     'is null': {
-      'should clean the fromPattern': function () {
+      'should set an empty array': function () {
         var endpoint = new jstp.JSTPEndpoint();
         var fromPattern = ["home"];
         endpoint.setFromPattern(fromPattern);
         endpoint.setFromPattern();
-        assert.isNull(endpoint.getFromPattern());
+        assert.equal(endpoint.getFromPattern().length, 0);
       }
     },
 
@@ -146,11 +153,18 @@ vows.describe('JSTPEndpoint').addBatch({
       var toPattern = ["home"];
       endpoint.setToPattern(toPattern);
       assert.equal(endpoint.getToPattern(), toPattern);
+    },
+
+    'not defined': {
+      'should return an empty array': function () {
+        var endpoint = new jstp.JSTPEndpoint();
+        assert.equal(endpoint.getToPattern().length, 0);
+      }
     }
   },
 
   '#setToPattern( Array toPattern )': {
-    'is a valid non empty array': {
+    'is a valid array': {
       'should set the toPattern': function () {
         var endpoint = new jstp.JSTPEndpoint();
         var toPattern = ["home"];
@@ -160,12 +174,12 @@ vows.describe('JSTPEndpoint').addBatch({
     },
 
     'is null': {
-      'should clean the toPattern': function () {
+      'should set an empty array': function () {
         var endpoint = new jstp.JSTPEndpoint();
         var toPattern = ["home"];
         endpoint.setToPattern(toPattern);
         endpoint.setToPattern();
-        assert.isNull(endpoint.getToPattern());        
+        assert.equal(endpoint.getToPattern().length, 0);        
       }
     },
 
