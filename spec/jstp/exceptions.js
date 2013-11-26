@@ -229,3 +229,9 @@ vows.describe('JSTPNotFound').addBatch({
     assert.isFunction(jstp.JSTPNotFound);
   }
 }).export(module); 
+
+vows.describe('JSTPNotASubscription').addBatch({
+  'should exist': function () {
+    assert.isFunction(jstp.JSTPNotASubscription);
+  }
+}).export(module); 
