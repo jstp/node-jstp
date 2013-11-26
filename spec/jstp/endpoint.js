@@ -60,25 +60,23 @@ vows.describe('JSTPEndpoint').addBatch({
     },
 
     'is null': {
-      'should clean the resourcePattern': function () {
+      'should return an empty Array': function () {
         var endpoint = new jstp.JSTPEndpoint();
         endpoint.setResourcePattern(null);
-        assert.isNull(endpoint.getResourcePattern());
+        assert.equal(endpoint.getResourcePattern().length, 0);
       }
     },
 
-    'is not a valid non empty array': {
-      'is an empty array': {
-        'should throw an JSTPInvalidResourcePatternType exception': function () {
-          var endpoint = new jstp.JSTPEndpoint();
-          var invalidResource = [];
-          try {
-            endpoint.setResourcePattern(invalidResource);
-          } catch (e) {
-            assert.instanceOf(e, jstp.JSTPInvalidResourcePatternType);
-          }
-        }
-      },
+    'is an empty array': {
+      'should set to empty array': function () {
+        var endpoint = new jstp.JSTPEndpoint();
+        var resource = [];
+        endpoint.setResourcePattern(resource);
+        assert.equal(endpoint.getResourcePattern(), resource);
+      }
+    },
+
+    'is not a valid array': {
 
       'is not an array nor null': {
         'should throw an JSTPInvalidResourcePatternType exception': function () {
@@ -537,6 +535,7 @@ vows.describe('JSTPEndpoint').addBatch({
     'should return the boolean AND of all the matches methods with the dispatch': function () {
       var endpoint = new jstp.JSTPEndpoint();
       var theDispatch = new jstp.JSTPDispatch();
+
       endpoint.matchResourcePattern = function (dispatch) {
         this.matchResourcePatternWasCalled = true;
         assert.equal(dispatch, theDispatch);
