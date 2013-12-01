@@ -12,6 +12,7 @@ var helper = {
 }
 
 vows.describe('JSTPSubscriptionManager').addBatch({
+
   'new JSTPSubscriptionManager( JSTPEngine engine )': {
     'shoud assign the engine': function () {
       var engine = {};
@@ -20,25 +21,30 @@ vows.describe('JSTPSubscriptionManager').addBatch({
     }
   },
 
-  '#bind( JSTPEndpoint endpoint, String transactionID, JSTPCallable callback [, Object context] )': {
-    'if not an JSTPEndpoint': {
-      'should throw a JSTPNotAnEndpoint': function () {
+  '#bind( JSTPSubscription )': {
+    'if not an JSTPSubscription': {
+      'should throw a JSTPNotASubscription': function () {
         var engine = {};
         var subscriptionManager = new jstp.JSTPSubscriptionManager(engine);
         assert.throws(function () {
           subscriptionManager.bind("somethingSomething", "transactionID", function () {});
-        }, jstp.JSTPNotAnEndpoint);
+        }, jstp.JSTPNotASubscription);
       }
     },
 
     'should call #validate in the JSTPEndpoint': function () {
       var engine = {};
       var endpoint = new jstp.JSTPEndpoint();
+      var subscription = new jstp.JSTPSubscription()
+        .setCallback(function () {})
+        .setTransactionID("transactionID");
       endpoint.validate = function () {
         this.validateWasCalled = true;
       }
+      subscription.setEndpoint(endpoint);
       var subscriptionManager = new jstp.JSTPSubscriptionManager(engine);
-      subscriptionManager.bind(endpoint, "transactionID", function () {});
+
+      subscriptionManager.bind(subscription);
       assert.isTrue(endpoint.validateWasCalled);
     },
 
@@ -49,27 +55,43 @@ vows.describe('JSTPSubscriptionManager').addBatch({
         var endpoint = new jstp.JSTPEndpoint()
           .setMethodPattern("*")
           .setResourcePattern(["what what"]);
+        var subscription = new jstp.JSTPSubscription()
+            .setCallback(function () {})
+            .setEndpoint(endpoint);
         assert.throws(function () {
-          subscriptionManager.bind(endpoint, null, function () {});
+          subscriptionManager.bind(subscription);
         }, jstp.JSTPMissingTransactionID);
       }
     },
 
-    'if the callback has no #call': {
-      'should throw a JSTPNotCallable': function () {
+    'if there is no callback': {
+      'should throw a JSTPMissingCallback': function () {
         var subscriptionManager = new jstp.JSTPSubscriptionManager({});
+        var subscription = new jstp.JSTPSubscription()
+            .setEndpoint(helper.validEndpoint)
+            .setTransactionID("transactionID");
         assert.throws(function () {
-          subscriptionManager.bind(helper.validEndpoint, "transactionID", "notCallable");
-        }, jstp.JSTPNotCallable);
+          subscriptionManager.bind(subscription);
+        }, jstp.JSTPMissingCallback);
       }
     },
 
     'if this endpoint was already bound for that callback/context pair': {
       'should throw a JSTPEndpointAlreadyBound exception': function () {
         var subscriptionManager = new jstp.JSTPSubscriptionManager({});
-        subscriptionManager.bind(helper.validEndpoint, "transactionID", helper.callback, helper.context);
+        var subscriptionOld = new jstp.JSTPSubscription()
+            .setEndpoint(helper.validEndpoint)
+            .setTransactionID("transactionID")
+            .setCallback(helper.callback)
+            .setContext(helper.context);
+        var subscriptionNew = new jstp.JSTPSubscription()
+            .setEndpoint(helper.validEndpoint)
+            .setTransactionID("transactionID")
+            .setCallback(helper.callback)
+            .setContext(helper.context);
+        subscriptionManager.bind(subscriptionOld);
         assert.throws(function () {
-          subscriptionManager.bind(helper.validEndpoint, "transactionID", helper.callback, helper.context);
+          subscriptionManager.bind(subscriptionNew);
         }, jstp.JSTPEndpointAlreadyBound);
       }
     },
@@ -77,11 +99,13 @@ vows.describe('JSTPSubscriptionManager').addBatch({
     'if everything is ok': {
       'should add the dictionary with the endpoint/callback/context/transactionID to the list': function () {
         var subscriptionManager = new jstp.JSTPSubscriptionManager({});
-        subscriptionManager.bind(helper.validEndpoint, "transactionID", helper.callback, helper.context);
-        assert.equal(subscriptionManager.subscriptions[0].endpoint, helper.validEndpoint);
-        assert.equal(subscriptionManager.subscriptions[0].transactionID, "transactionID");
-        assert.equal(subscriptionManager.subscriptions[0].callback, helper.callback);
-        assert.equal(subscriptionManager.subscriptions[0].context, helper.context);
+        var subscription = new jstp.JSTPSubscription()
+            .setEndpoint(helper.validEndpoint)
+            .setTransactionID("transactionID")
+            .setCallback(helper.callback)
+            .setContext(helper.context);        
+        subscriptionManager.bind(subscription);
+        assert.equal(subscriptionManager.subscriptions[0], subscription);
       }
     }
   },
@@ -90,8 +114,12 @@ vows.describe('JSTPSubscriptionManager').addBatch({
     'if was not found': {
       'should throw a JSTPUnboundEndpoint exception': function () {
         var subscriptionManager = new jstp.JSTPSubscriptionManager();
+        var subscription = new jstp.JSTPSubscription()
+            .setEndpoint(helper.validEndpoint)
+            .setCallback(helper.callback)
+            .setContext(helper.context);
         assert.throws(function () {
-          subscriptionManager.release(helper.validEndpoint, helper.callback, helper.context);          
+          subscriptionManager.release(subscription);          
         }, jstp.JSTPUnboundEndpoint);
       }
     },
@@ -99,8 +127,13 @@ vows.describe('JSTPSubscriptionManager').addBatch({
     'if it matched something': {
       'should remove the matching dictionary from the list': function () {
         var subscriptionManager = new jstp.JSTPSubscriptionManager({});
-        subscriptionManager.bind(helper.validEndpoint, "transactionID", helper.callback, helper.context);
-        subscriptionManager.release(helper.validEndpoint, helper.callback, helper.context);          
+        var subscription = new jstp.JSTPSubscription()
+            .setEndpoint(helper.validEndpoint)
+            .setCallback(helper.callback)
+            .setTransactionID("transactionID")
+            .setContext(helper.context);
+        subscriptionManager.bind(subscription);
+        subscriptionManager.release(subscription);          
         assert.equal(subscriptionManager.subscriptions.length, 0);          
       }
     }
@@ -121,12 +154,13 @@ vows.describe('JSTPSubscriptionManager').addBatch({
       'if it matches no endpoint': {
         'should throw a JSTPNotFound': function () {
           var subscriptionManager = new jstp.JSTPSubscriptionManager({});
-          subscriptionManager.bind(
-            helper.validEndpoint, 
-            "transactionID", 
-            helper.callback, 
-            helper.context
-          );
+          var subscription = new jstp.JSTPSubscription()
+              .setContext(helper.context)
+              .setCallback(helper.callback)
+              .setTransactionID("transactionID")
+              .setEndpoint(helper.validEndpoint);
+          subscriptionManager.bind(subscription);
+
           var dispatch = new jstp.JSTPDispatch()
               .setMethod("GET")
               .setResource(["several", "pizzas"]);
@@ -140,20 +174,57 @@ vows.describe('JSTPSubscriptionManager').addBatch({
       'if it matches an endpoint': {
         'if it has a transactionID': {
           'should get a clone of the dispatch with a triggering ID set': function () {
+            var clone = null;
+            var transactionManager = {
+              newWithTriggeringID: function (dispatch) {
+                this.newWithTriggeringIDWasCalled = true;
+                var transactionManager = new jstp.JSTPTransactionManager();
+                clone = transactionManager.newWithTriggeringID(dispatch);
+                return clone;
+              }
+            }
+
+            var engine = {
+              getTransactionManager: function () {
+                return transactionManager;
+              }
+            }
+
             var subscriptionManager = new jstp.JSTPSubscriptionManager({});
-/*            var emitter = {
+
+            var emitter = {
               endpoint: new jstp.JSTPEndpoint()
                           .setMethodPattern("GET")
                           .setResourcePattern(["*"]),
+
               callback: function (triggeringPackage) {
                 this.callbackWasCalled = true;
                 assert.instanceOf(triggeringPackage, jstp.JSTPTriggeringPackage);
                 assert.equal(this, emitter);
-                // 
-                assert.equal(triggeringPackage.dispatch)
-              }
+                assert.equal(triggeringPackage.dispatch, clone);
+                assert.equal(triggeringPackage.engine, engine);
+              },
+
+              name: "spec"
             }
-            subscriptionManager.bind() */
+
+
+            var dispatch = new jstp.JSTPDispatch()
+                  .setMethod("GET")
+                  .setResource(["matches"]);
+
+            var subscription = new jstp.JSTPSubscription()
+                .setEndpoint(emitter.endpoint)
+                .setCallback(emitter.callback)
+                .setContext(emitter.context)
+                .setEmitter(emitter.name)
+                .setTransactionID("transactionID");
+            subscriptionManager.bind(subscription);
+
+            subscriptionManager.trigger( dispatch );
+
+            assert.isTrue(emitter.callbackWasCalled);
+            assert.isTrue(transactionManager.newWithTriggeringIDWasCalled);
           }
         },
 
@@ -163,6 +234,10 @@ vows.describe('JSTPSubscriptionManager').addBatch({
 
         'if there is no context': {
           'should call the callback with the triggering package containing the dispatch, engine and params': 'pending'
+        },
+
+        'if the matching endpoint has Named Element Wildcards': {
+          'the triggeringPackage should have the params': 'pending'
         }
       }
     }
