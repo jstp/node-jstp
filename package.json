@@ -12,9 +12,6 @@
       "email": "lbertenasco@gmail.com"
     }
   ],
-  "dependencies": {
-    "uuid": "1.4.1"
-  },
   "devDependencies": {
     "vows": "latest"
   },
@@ -26,7 +23,7 @@
   "scripts": {
     "test": "vows spec/jstp/* --spec"
   },
-  "repository": "git://github.com/southlogics/node-jstp",
+  "repository": "git://github.com/jstp/node-jstp",
   "main": "index",
   "engines": {
     "node": "*"
